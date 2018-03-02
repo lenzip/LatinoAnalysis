@@ -658,7 +658,7 @@ def gardener_cli( modules ):
     '''
 
     parser = optparse.OptionParser(usage)
-    parser.add_option('-t','--tree',        dest='tree',                                default='latino',   help='Name of the tree to operate on (default = %default)')
+    parser.add_option('-t','--tree',        dest='tree',                                default='Events',   help='Name of the tree to operate on (default = %default)')
     parser.add_option('-r','--recursive',   dest='recursive',   action='store_true',    default=False,      help='Recurse subdirectories (default = %default)')
     parser.add_option('-F','--force',       dest='force',       action='store_true',    default=False,      help='Don\'t ask for confirmation when recursing (default = %default)')
 

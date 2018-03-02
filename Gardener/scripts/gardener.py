@@ -107,7 +107,7 @@ from LatinoAnalysis.Gardener.variables.BWEwkSingletReweighter     import BWEwkSi
 # PDF and scale uncertainty
 #from LatinoAnalysis.Gardener.variables.pdfAndScaleUncertainty     import PdfAndScaleUncertaintyTreeMaker
 # GenPT for the top
-from LatinoAnalysis.Gardener.variables.TopGenPt                   import TopGenPt
+from LatinoAnalysis.Gardener.variables.TopGenVar                   import TopGenVar
 
 # ggH uncertainty LHCXSWG
 from LatinoAnalysis.Gardener.variables.ggHUncertainty             import ggHUncertaintyMaker
@@ -243,7 +243,7 @@ if __name__ == '__main__':
     modules['BWEwkSingletReweighter'] = BWEwkSingletReweighter()
 
 # Top gen pt for reweighting
-    modules['TopGenPt'] = TopGenPt()
+    modules['TopGenVar'] = TopGenVar()
     
 # ggH uncertainty LHCXSWG
     modules['ggHUncertainty'] = ggHUncertaintyMaker()
