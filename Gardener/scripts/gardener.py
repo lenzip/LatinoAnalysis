@@ -110,6 +110,8 @@ from LatinoAnalysis.Gardener.variables.BWEwkSingletReweighter     import BWEwkSi
 from LatinoAnalysis.Gardener.variables.TopGenVar                   import TopGenVar
 #Higgs gen vars
 from LatinoAnalysis.Gardener.variables.HiggsGenVar                 import HiggsGenVar
+# prompt patrticles
+from LatinoAnalysis.Gardener.variables.PromptParticlesGenVars      import PromptParticlesGenVars
 
 # ggH uncertainty LHCXSWG
 from LatinoAnalysis.Gardener.variables.ggHUncertainty             import ggHUncertaintyMaker
@@ -255,6 +257,10 @@ if __name__ == '__main__':
 
 # higgs gen variables
     modules['HiggsGenVar'] = HiggsGenVar()
+
+
+# prompt particle gen vars
+    modules['PromptParticlesGenVars'] = PromptParticlesGenVars()
 
 # VH reweighting for anomalous HHH coupling
     modules['reweightHHH'] = genReweightHHHMaker()

@@ -58,11 +58,11 @@ class PromptParticlesGenVars(TreeCloner):
 
         self.clone(output,self.newbranches)
 
-                
+        newbranchesSimpleVars = {}        
         newbranchesVecotor = {}
         for particle in particles:
           bvariable = numpy.zeros(1, dtype=numpy.int32) 
-          newbranchesVecotor["n"+] = bvariable
+          newbranchesSimpleVars["n"+particle] = bvariable
           for quantity in intQuantities:
             bvector =  ROOT.std.vector(int) ()
             newbranchesVecotor[particle+"_"+quantity] = bvector
@@ -76,7 +76,11 @@ class PromptParticlesGenVars(TreeCloner):
         for bname, bvariable in newbranchesVecotor.iteritems():
             print " bname   = ", bname
             print " bvariable = ", bvariable
-            self.otree.Branch(bname,bvariable,bname+'/F')
+            self.otree.Branch(bname,bvariable)
+        for bname, bvariable in newbranchesSimpleVars.iteritems():
+            print " bname   = ", bname
+            print " bvariable = ", bvariable
+            self.otree.Branch(bname,bvariable,bname+"/I")
 
 
   
@@ -90,8 +94,8 @@ class PromptParticlesGenVars(TreeCloner):
         print '- Starting eventloop'
         step = 5000
 
-        #for i in xrange(5000):
-        for i in xrange(nentries):
+        for i in xrange(5000):
+        #for i in xrange(nentries):
 
           itree.GetEntry(i)
 
@@ -102,21 +106,28 @@ class PromptParticlesGenVars(TreeCloner):
           for ipart in range(nGen):
             isDecayedAndLastCopy=int("0100000000001000", 2)
             particle = ""
-            if ( (abs(itree.GenPart_pdgId[ipart])==11 or abs(itree.GenPart_pdgId[ipart])==13) and itree.GenPart_status == 1 ) or \
+            if ( (abs(itree.GenPart_pdgId[ipart])==11 or abs(itree.GenPart_pdgId[ipart])==13) and itree.GenPart_status[ipart] == 1 ) or \
                  (abs(itree.GenPart_pdgId[ipart])==15 and (itree.GenPart_statusFlags[ipart] & isDecayedAndLastCopy) == isDecayedAndLastCopy) :
               particle = "leptonGen"
-            if itree.GenPart_pdgId[ipart]) == 22 and itree.GenPart_status == 1:
+            if itree.GenPart_pdgId[ipart] == 22 and itree.GenPart_status == 1:
               particle = "photonGen"
-            if (abs(itree.GenPart_pdgId[ipart])=12 or abs(itree.GenPart_pdgId[ipart])==14 or abs(itree.GenPart_pdgId[ipart])==16) and itree.GenPart_status == 1:
+            if (abs(itree.GenPart_pdgId[ipart])==12 or abs(itree.GenPart_pdgId[ipart])==14 or abs(itree.GenPart_pdgId[ipart])==16) and itree.GenPart_status[ipart] == 1:
               particle = "neutrinoGen"
             if particle != "":
-              newbranchesVecotor["n"+particle][0] += 1
+              #print particle  
+              newbranchesSimpleVars["n"+particle][0] += 1
               newbranchesVecotor[particle+"_pid"].push_back(itree.GenPart_pdgId[ipart])
               newbranchesVecotor[particle+"_pt"].push_back(itree.GenPart_pt[ipart])
               newbranchesVecotor[particle+"_eta"].push_back(itree.GenPart_eta[ipart])
               newbranchesVecotor[particle+"_phi"].push_back(itree.GenPart_phi[ipart])
-              newbranchesVecotor[particle+"_MotherPID"].push_back(itree.GenPart_pdgId[itree.GenPart_genPartIdxMother[ipart]])
-              newbranchesVecotor[particle+"_MotherStatus"].push_back(itree.GenPart_status[itree.GenPart_genPartIdxMother[ipart]])
+              #print itree.GenPart_pdgId[ipart], itree.GenPart_genPartIdxMother[ipart], nGen
+              motherid = -9999
+              motherstatus = -9999
+              if itree.GenPart_genPartIdxMother[ipart] > 0:
+                motherid = itree.GenPart_pdgId[itree.GenPart_genPartIdxMother[ipart]] 
+                motherstatus = itree.GenPart_status[itree.GenPart_genPartIdxMother[ipart]]
+              newbranchesVecotor[particle+"_MotherPID"].push_back(motherid)
+              newbranchesVecotor[particle+"_MotherStatus"].push_back(motherstatus)
               isFromHardProcess = int("000000100000000", 2)
               newbranchesVecotor[particle+"_fromHardProcess"].push_back(bool(itree.GenPart_statusFlags[ipart] & isFromHardProcess))
               isDirectHadronDecayProduct = int("000000010000000", 2)  
@@ -130,10 +141,11 @@ class PromptParticlesGenVars(TreeCloner):
                 
 
           otree.Fill()
-          for bname, bvector in newbranchesVecotor.iteritems():
-            bvector.clear()
           for particle in particles:
-            newbranchesVecotor["n"+particle][0]=0
+            for quantity in allQuantities:
+              newbranchesVecotor[particle+"_"+quantity].clear()
+          for particle in particles:
+            newbranchesSimpleVars["n"+particle][0]=0
         self.disconnect()
         print '- Eventloop completed'
 
