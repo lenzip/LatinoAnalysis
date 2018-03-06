@@ -110,8 +110,8 @@ class PromptParticlesGenVars(TreeCloner):
         print '- Starting eventloop'
         step = 5000
 
-        for i in xrange(5000):
-        #for i in xrange(nentries):
+        #for i in xrange(5000):
+        for i in xrange(nentries):
 
           itree.GetEntry(i)
 
@@ -124,7 +124,7 @@ class PromptParticlesGenVars(TreeCloner):
             if ( (abs(itree.GenPart_pdgId[ipart])==11 or abs(itree.GenPart_pdgId[ipart])==13) and itree.GenPart_status[ipart] == 1 ) or \
                  (abs(itree.GenPart_pdgId[ipart])==15 and itree.GenPart_statusFlags[ipart] >> 1 & 1 and itree.GenPart_statusFlags[ipart] >> 13 & 1) : # isDecayed and LastCOpy
               particle = "leptonGen"
-            if itree.GenPart_pdgId[ipart] == 22 and itree.GenPart_status == 1:
+            if itree.GenPart_pdgId[ipart] == 22 and itree.GenPart_status[ipart] == 1:
               particle = "photonGen"
             if (abs(itree.GenPart_pdgId[ipart])==12 or abs(itree.GenPart_pdgId[ipart])==14 or abs(itree.GenPart_pdgId[ipart])==16) and itree.GenPart_status[ipart] == 1:
               particle = "neutrinoGen"
