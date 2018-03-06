@@ -20,6 +20,7 @@ from array import array;
 import math
 import copy
 
+
 class PromptParticlesGenVars(TreeCloner):
     def __init__(self):
        pass
@@ -32,6 +33,21 @@ class PromptParticlesGenVars(TreeCloner):
 
     def checkOptions(self,opts):
         pass
+
+    
+    def sortByPt(self, vectors):
+      zipped=zip(*vectors)
+      sortzipped=sorted(zipped, reverse=True)
+      sortedvectors = zip(*sortzipped)
+
+      for iv,sortedvector in enumerate(sortedvectors):
+        #print "vector", iv
+        size = len(sortedvector)
+        for i in range(size):
+          #print "old\t",(vectors[iv])[i],"\tnew\t",sortedvector[i] 
+          (vectors[iv])[i] = sortedvector[i]  
+        
+      
 
     def process(self,**kwargs):
         tree  = kwargs['tree']
@@ -70,7 +86,7 @@ class PromptParticlesGenVars(TreeCloner):
             bvector =  ROOT.std.vector(float) ()
             newbranchesVecotor[particle+"_"+quantity] = bvector
           for quantity in boolQuantities:
-            bvector =  ROOT.std.vector(bool) ()
+            bvector =  ROOT.std.vector(int) ()
             newbranchesVecotor[particle+"_"+quantity] = bvector
 
         for bname, bvariable in newbranchesVecotor.iteritems():
@@ -104,10 +120,9 @@ class PromptParticlesGenVars(TreeCloner):
 
           nGen = itree.nGenPart
           for ipart in range(nGen):
-            isDecayedAndLastCopy=int("0100000000001000", 2)
             particle = ""
             if ( (abs(itree.GenPart_pdgId[ipart])==11 or abs(itree.GenPart_pdgId[ipart])==13) and itree.GenPart_status[ipart] == 1 ) or \
-                 (abs(itree.GenPart_pdgId[ipart])==15 and (itree.GenPart_statusFlags[ipart] & isDecayedAndLastCopy) == isDecayedAndLastCopy) :
+                 (abs(itree.GenPart_pdgId[ipart])==15 and itree.GenPart_statusFlags[ipart] >> 1 & 1 and itree.GenPart_statusFlags[ipart] >> 13 & 1) : # isDecayed and LastCOpy
               particle = "leptonGen"
             if itree.GenPart_pdgId[ipart] == 22 and itree.GenPart_status == 1:
               particle = "photonGen"
@@ -128,18 +143,20 @@ class PromptParticlesGenVars(TreeCloner):
                 motherstatus = itree.GenPart_status[itree.GenPart_genPartIdxMother[ipart]]
               newbranchesVecotor[particle+"_MotherPID"].push_back(motherid)
               newbranchesVecotor[particle+"_MotherStatus"].push_back(motherstatus)
-              isFromHardProcess = int("000000100000000", 2)
-              newbranchesVecotor[particle+"_fromHardProcess"].push_back(bool(itree.GenPart_statusFlags[ipart] & isFromHardProcess))
-              isDirectHadronDecayProduct = int("000000010000000", 2)  
-              newbranchesVecotor[particle+"_isDirectHadronDecayProduct"].push_back(bool(itree.GenPart_statusFlags[ipart] & isDirectHadronDecayProduct))
-              isDirectPromptTauDecayProduct = int("000000001000000", 2)
-              newbranchesVecotor[particle+"_isDirectPromptTauDecayProduct"].push_back(bool(itree.GenPart_statusFlags[ipart] & isDirectPromptTauDecayProduct))
-              isPrompt = int("000000000000001", 2)
-              newbranchesVecotor[particle+"_isPrompt"].push_back(bool(itree.GenPart_statusFlags[ipart] & isPrompt))
-              isTauDecayProduct = int("000000000001000", 2)
-              newbranchesVecotor[particle+"_isTauDecayProduct"].push_back(bool(itree.GenPart_statusFlags[ipart] & isTauDecayProduct))
-                
-
+              newbranchesVecotor[particle+"_fromHardProcess"].push_back(int(itree.GenPart_statusFlags[ipart] >> 8 & 1))
+              newbranchesVecotor[particle+"_isDirectHadronDecayProduct"].push_back(int(itree.GenPart_statusFlags[ipart] >> 6 & 1))
+              newbranchesVecotor[particle+"_isDirectPromptTauDecayProduct"].push_back(int(itree.GenPart_statusFlags[ipart] >> 5 & 1))
+              newbranchesVecotor[particle+"_isPrompt"].push_back(int(itree.GenPart_statusFlags[ipart] & 1))
+              newbranchesVecotor[particle+"_isTauDecayProduct"].push_back(int(itree.GenPart_statusFlags[ipart] >> 3 & 1))
+          for particle in particles:
+            vectorsToOrder = []
+            vectorsToOrder.append(newbranchesVecotor[particle+"_pt"])
+            #print "old",newbranchesVecotor[particle+"_pt"][0]
+            for quantity in allQuantities:
+              if quantity != "pt":
+                vectorsToOrder.append(newbranchesVecotor[particle+"_"+quantity])
+            self.sortByPt(vectorsToOrder)
+            #print "new",newbranchesVecotor[particle+"_pt"][0]
           otree.Fill()
           for particle in particles:
             for quantity in allQuantities:
