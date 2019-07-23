@@ -21,6 +21,7 @@ class JESTreeMaker(TreeCloner):
         description = self.help()
         group = optparse.OptionGroup(parser,self.label, description)
         group.add_option('-k', '--kind',   dest='kind', help='Kind of variation: -1, +1, +0.5, ...', default=1.0)
+        group.add_option('--source', dest='uncertaintySource', help='uncertainty source (default None, i.e. full uncertainty)', default=None)
         group.add_option('-m', '--maxUncertainty',   dest='maxUncertainty', help='Use maximum of JES uncertainties', default=False, action="store_true")
         group.add_option('-c', '--cmssw', dest='cmssw', help='cmssw version (naming convention may change)', default='763', type='string')
         parser.add_option_group(group)
@@ -39,6 +40,12 @@ class JESTreeMaker(TreeCloner):
         self.cmssw = opts.cmssw
         print " cmssw = ", self.cmssw
 
+        self.uncertaintySource = opts.uncertaintySource
+        if self.uncertaintySource == None:
+          print "computing using full uncertainty"
+        else:
+          print "computing uncertainty for source", self.uncertaintySource
+
     def changeOrder(self, vectorname, vector, jetOrderList) :
         # take vector and clone vector
         # equivalent of: temp_vector = itree."vector"
@@ -53,7 +60,9 @@ class JESTreeMaker(TreeCloner):
     # Strange algebra to be able to use raw phi angles
     def sgn_deltaphi(self, phi1, phi2) :
         dphi = phi1 - phi2
-        if abs(dphi) > ROOT.TMath.Pi() :
+        if dphi < -ROOT.TMath.Pi() :
+            dphi = dphi + 2*ROOT.TMath.Pi()
+        elif dphi > ROOT.TMath.Pi() :
             dphi = dphi - 2*ROOT.TMath.Pi()
         return dphi
 
@@ -135,7 +144,11 @@ class JESTreeMaker(TreeCloner):
 
         # Load jes uncertainty
         if self.cmssw == 'Full2016':
+          if self.uncertaintySource == None:  
             jecUnc = ROOT.JetCorrectionUncertainty(os.path.expandvars("${CMSSW_BASE}/src/LatinoAnalysis/Gardener/input/Summer16_23Sep2016V4_MC_Uncertainty_AK4PFchs.txt"))
+          else:
+            jetCorrPar = ROOT.JetCorrectorParameters(os.path.expandvars("${CMSSW_BASE}/src/LatinoAnalysis/Gardener/input/Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt"), self.uncertaintySource);
+            jecUnc = ROOT.JetCorrectionUncertainty(jetCorrPar)
         if self.cmssw == 'ICHEP2016':
             jecUncSpring16V1 = ROOT.JetCorrectionUncertainty(os.path.expandvars("${CMSSW_BASE}/src/LatinoAnalysis/Gardener/input/Spring16_25nsV1_MC_Uncertainty_AK4PFchs.txt"))
             jecUncSpring16V6 = ROOT.JetCorrectionUncertainty(os.path.expandvars("${CMSSW_BASE}/src/LatinoAnalysis/Gardener/input/Spring16_25nsV6_MC_Uncertainty_AK4PFchs.txt"))

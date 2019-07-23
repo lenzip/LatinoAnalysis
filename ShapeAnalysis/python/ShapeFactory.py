@@ -36,6 +36,7 @@ class ShapeFactory:
         self._samples = samples
 
 
+        self._treeName = 'latino'
 
 
     # _____________________________________________________________________________
@@ -72,6 +73,13 @@ class ShapeFactory:
         for variableName, variable in self._variables.iteritems():
           if variable.has_key('linesToAdd'):
             linesToAdd = variable['linesToAdd']
+            for line in linesToAdd:
+              ROOT.gROOT.ProcessLineSync(line)
+        
+        #in case some samples need a compiled function 
+        for sampleName, sample in self._samples.iteritems():
+          if sample.has_key('linesToAdd'):
+            linesToAdd = sample['linesToAdd']
             for line in linesToAdd:
               ROOT.gROOT.ProcessLineSync(line)
         
@@ -136,12 +144,25 @@ class ShapeFactory:
           #print 'sample[name] = ', sample['name']
               
         #                                                                 skipMissingFiles
-        inputs = self._connectInputs( list_of_trees_to_connect, inputDir, False)
+        inputs, evlists = self._connectInputs( list_of_trees_to_connect, inputDir, False)
                    
+        # Sept 2017
+        # Tree kind nuisances can be hanndled in two ways:
+        # usual way: a full tree for the variation up and a full tree for the variation down
+        # This behavior is activated by the presence in the nuisances.py file of the tags 'folderUp' and 'folderDown'
+        # alternative way: a combination of trees holding only the varied branches and the central tree for all the unvaried branches.
+        # This behavior is activated by the presence in the nuisances.py file of the tags: 'unskimmedFolderUp', 'unskimmedFolderDown', 'unskimmedFriendTreeDir'.
+        # Note that one has to use trees before skimming. The skimming can be applied on top is the additional tags 'skimListFolderUp' and 'skimListFolderDown'
+        # are present. These tags hold the path to the directories holding the files holding the "prunerlist" event list
+
+
+
 
         # connect nuisances trees
         inputsNuisanceUp   = {}
         inputsNuisanceDown = {}
+        evlistsNuisanceUp = {}
+        evlistsNuisanceDown = {}
 
         for nuisanceName, nuisance in nuisances.iteritems():
           if nuisanceName == "stat":
@@ -158,12 +179,30 @@ class ShapeFactory:
                   if sampleName == sampleNuisName :
                     list_of_trees_to_connect[sampleNuisName] = [os.path.basename(s) if '###' in s else s for s in self._samples[sampleNuisName]['name']]
               
-              friendsDir = None
+              unskimmedFriendsDir = None
+              unskimmedFolderUp = None
+              unskimmedFolderDown = None
+              skimListFolderUp = None
+              skimListFolderDown = None
+              
               if 'unskimmedFriendTreeDir' in nuisance.keys():
-                friendsDir = nuisance['unskimmedFriendTreeDir']
-              #                                                                                                        skipMissingFiles                
-              inputsNuisanceUp[nuisanceName]   = self._connectInputs( list_of_trees_to_connect, nuisance['folderUp']  , True, friendsDir)
-              inputsNuisanceDown[nuisanceName] = self._connectInputs( list_of_trees_to_connect, nuisance['folderDown'], True, friendsDir)
+                unskimmedFriendsDir = nuisance['unskimmedFriendTreeDir']
+              if 'unskimmedFolderUp' in nuisance.keys():
+                unskimmedFolderUp = nuisance['unskimmedFolderUp']
+              if 'unskimmedFolderDown' in nuisance.keys():
+                unskimmedFolderDown = nuisance['unskimmedFolderDown']
+              if 'skimListFolderUp' in nuisance.keys():
+                skimListFolderUp = nuisance['skimListFolderUp']
+              if 'skimListFolderDown' in nuisance.keys():
+                skimListFolderDown = nuisance['skimListFolderDown']   
+
+              if unskimmedFriendsDir == None: 
+                #                                                                                                        skipMissingFiles                
+                inputsNuisanceUp[nuisanceName], evlistsNuisanceUp[nuisanceName]   = self._connectInputs( list_of_trees_to_connect, nuisance['folderUp']  , True )
+                inputsNuisanceDown[nuisanceName], evlistsNuisanceDown[nuisanceName] = self._connectInputs( list_of_trees_to_connect, nuisance['folderDown'], True )
+              else:
+                inputsNuisanceUp[nuisanceName], evlistsNuisanceUp[nuisanceName]   = self._connectInputs( list_of_trees_to_connect, nuisance['unskimmedFolderUp']  , True, unskimmedFriendsDir, skimListFolderUp)
+                inputsNuisanceDown[nuisanceName], evlistsNuisanceDown[nuisanceName]   = self._connectInputs( list_of_trees_to_connect, nuisance['unskimmedFolderDown']  , True, unskimmedFriendsDir, skimListFolderDown)
               
               #print " >> nuisanceName : ", nuisanceName, " -> ",    list_of_trees_to_connect  , " from ",    nuisance['folderUp'] , " / " , nuisance['folderDown'] 
 
@@ -417,14 +456,14 @@ class ShapeFactory:
                         #print " nuisanceName = ", nuisanceName, " sampleName = ", sampleName, " newSampleWeightDo = ", newSampleWeightDo
                         #print " nuisance:sample = ", sample
                         if 'weights' in sample.keys() :
-                          self._filterTrees( sample ['weight'], sample ['weights'], '(' + cut + ') && (' + supercut + ')' , inputsNuisanceUp[nuisanceName][sampleName]  , cutName, newSampleNameUp)
+                          self._filterTrees( sample ['weight'], sample ['weights'], '(' + cut + ') && (' + supercut + ')' , inputsNuisanceUp[nuisanceName][sampleName]  , cutName, newSampleNameUp, evlistsNuisanceUp[nuisanceName][sampleName])
                         else :                                                                                                                                            
-                          self._filterTrees( sample ['weight'], []                , '(' + cut + ') && (' + supercut + ')' , inputsNuisanceUp[nuisanceName][sampleName]  , cutName, newSampleNameUp)
+                          self._filterTrees( sample ['weight'], []                , '(' + cut + ') && (' + supercut + ')' , inputsNuisanceUp[nuisanceName][sampleName]  , cutName, newSampleNameUp, evlistsNuisanceUp[nuisanceName][sampleName])
           
                         if 'weights' in sample.keys() :
-                          self._filterTrees( sample ['weight'], sample ['weights'], '(' + cut + ') && (' + supercut + ')' , inputsNuisanceDown[nuisanceName][sampleName], cutName, newSampleNameDo)
+                          self._filterTrees( sample ['weight'], sample ['weights'], '(' + cut + ') && (' + supercut + ')' , inputsNuisanceDown[nuisanceName][sampleName], cutName, newSampleNameDo, evlistsNuisanceDown[nuisanceName][sampleName])
                         else :                                                                                              
-                          self._filterTrees( sample ['weight'], []                , '(' + cut + ') && (' + supercut + ')' , inputsNuisanceDown[nuisanceName][sampleName], cutName, newSampleNameDo)
+                          self._filterTrees( sample ['weight'], []                , '(' + cut + ') && (' + supercut + ')' , inputsNuisanceDown[nuisanceName][sampleName], cutName, newSampleNameDo, evlistsNuisanceDown[nuisanceName][sampleName])
         
   
           # now let's start with all the variables ...
@@ -447,9 +486,9 @@ class ShapeFactory:
               
               # create histogram: already the "hadd" of possible sub-contributions
               if 'weights' in sample.keys() :
-                outputsHisto = self._draw( variable['name'], variable['range'], sample ['weight'], sample ['weights'], cut, sampleName, inputs[sampleName], doFold, cutName, variableName)
+                outputsHisto = self._draw( variable['name'], variable['range'], sample ['weight'], sample ['weights'], cut, sampleName, inputs[sampleName], doFold, cutName, variableName, sample, True)
               else :
-                outputsHisto = self._draw( variable['name'], variable['range'], sample ['weight'], [],                 cut, sampleName, inputs[sampleName], doFold, cutName, variableName)
+                outputsHisto = self._draw( variable['name'], variable['range'], sample ['weight'], [],                 cut, sampleName, inputs[sampleName], doFold, cutName, variableName, sample, True)
                
               outputsHisto.Write()              
               
@@ -500,7 +539,6 @@ class ShapeFactory:
                               # fix negative bins not consistent
                               self._fixNegativeBin(outputsHistoUp, outputsHisto)
                               self._fixNegativeBin(outputsHistoDo, outputsHisto)
-                              
                               # save the new two histograms in final root file
                               outputsHistoUp.Write()
                               outputsHistoDo.Write()
@@ -526,15 +564,21 @@ class ShapeFactory:
                           
                           
                           if 'weights' in sample.keys() :
-                            outputsHistoUp = self._draw( variable['name'], variable['range'], newSampleWeightUp, sample ['weights'], cut, newSampleNameUp , inputs[sampleName], doFold, cutName, variableName)
+                            outputsHistoUp = self._draw( variable['name'], variable['range'], newSampleWeightUp, sample ['weights'], cut, newSampleNameUp , inputs[sampleName], doFold, cutName, variableName, sample, False)
                           else :
-                            outputsHistoUp = self._draw( variable['name'], variable['range'], newSampleWeightUp, [],                 cut, newSampleNameUp , inputs[sampleName], doFold, cutName, variableName)
+                            outputsHistoUp = self._draw( variable['name'], variable['range'], newSampleWeightUp, [],                 cut, newSampleNameUp , inputs[sampleName], doFold, cutName, variableName, sample, False)
             
                           if 'weights' in sample.keys() :
-                            outputsHistoDo = self._draw( variable['name'], variable['range'], newSampleWeightDo, sample ['weights'], cut, newSampleNameDo , inputs[sampleName], doFold, cutName, variableName)
+                            outputsHistoDo = self._draw( variable['name'], variable['range'], newSampleWeightDo, sample ['weights'], cut, newSampleNameDo , inputs[sampleName], doFold, cutName, variableName, sample, False)
                           else :
-                            outputsHistoDo = self._draw( variable['name'], variable['range'], newSampleWeightDo, [],                 cut, newSampleNameDo , inputs[sampleName], doFold, cutName, variableName)
-            
+                            outputsHistoDo = self._draw( variable['name'], variable['range'], newSampleWeightDo, [],                 cut, newSampleNameDo , inputs[sampleName], doFold, cutName, variableName, sample, False)
+
+                  
+                          if 'suppressNegativeNuisances' in sample.keys() and ( cutName in sample['suppressNegativeNuisances'] or 'all' in sample['suppressNegativeNuisances']) :        
+                            # fix negative bins not consistent
+                            self._fixNegativeBin(outputsHistoUp, outputsHisto)
+                            self._fixNegativeBin(outputsHistoDo, outputsHisto)
+
                           # now save to the root file
                           outputsHistoUp.Write()
                           outputsHistoDo.Write()
@@ -558,14 +602,14 @@ class ShapeFactory:
                           #print " ===> ", variable['name'], variable['range'], newSampleWeightUp, sample ['weights'], cut, newSampleNameUp , inputsNuisanceUp[nuisanceName][sampleName], doFold
                            
                           if 'weights' in sample.keys() :
-                            outputsHistoUp = self._draw( variable['name'], variable['range'], newSampleWeightUp, sample ['weights'], cut, newSampleNameUp , inputsNuisanceUp[nuisanceName][sampleName], doFold, cutName, variableName)
+                            outputsHistoUp = self._draw( variable['name'], variable['range'], newSampleWeightUp, sample ['weights'], cut, newSampleNameUp , inputsNuisanceUp[nuisanceName][sampleName], doFold, cutName, variableName, sample, False)
                           else :
-                            outputsHistoUp = self._draw( variable['name'], variable['range'], newSampleWeightUp, [],                 cut, newSampleNameUp , inputsNuisanceUp[nuisanceName][sampleName], doFold, cutName, variableName)
+                            outputsHistoUp = self._draw( variable['name'], variable['range'], newSampleWeightUp, [],                 cut, newSampleNameUp , inputsNuisanceUp[nuisanceName][sampleName], doFold, cutName, variableName, sample, False)
             
                           if 'weights' in sample.keys() :
-                            outputsHistoDo = self._draw( variable['name'], variable['range'], newSampleWeightDo, sample ['weights'], cut, newSampleNameDo , inputsNuisanceDown[nuisanceName][sampleName], doFold, cutName, variableName)
+                            outputsHistoDo = self._draw( variable['name'], variable['range'], newSampleWeightDo, sample ['weights'], cut, newSampleNameDo , inputsNuisanceDown[nuisanceName][sampleName], doFold, cutName, variableName, sample, False)
                           else :
-                            outputsHistoDo = self._draw( variable['name'], variable['range'], newSampleWeightDo, [],                 cut, newSampleNameDo , inputsNuisanceDown[nuisanceName][sampleName], doFold, cutName, variableName)
+                            outputsHistoDo = self._draw( variable['name'], variable['range'], newSampleWeightDo, [],                 cut, newSampleNameDo , inputsNuisanceDown[nuisanceName][sampleName], doFold, cutName, variableName, sample, False)
             
             
                           # check if I need to symmetrize:
@@ -574,6 +618,11 @@ class ShapeFactory:
                           #    - if we really want to symmetrize, typically the down fluctuation is set to be the default
                           if 'symmetrize' in nuisance:
                             self._symmetrize(outputsHistoUp, outputsHistoDo)
+
+                          if 'suppressNegativeNuisances' in sample.keys() and ( cutName in sample['suppressNegativeNuisances'] or 'all' in sample['suppressNegativeNuisances']) :        
+                            # fix negative bins not consistent
+                            self._fixNegativeBin(outputsHistoUp, outputsHisto)
+                            self._fixNegativeBin(outputsHistoDo, outputsHisto)
             
                           # now save to the root file
                           outputsHistoUp.Write()
@@ -615,7 +664,7 @@ class ShapeFactory:
 
 
     # _____________________________________________________________________________
-    def _filterTrees(self, global_weight, weights, cut, inputs, cutName, sampleName):       
+    def _filterTrees(self, global_weight, weights, cut, inputs, cutName, sampleName, evlists = []):       
         '''
         global_weight :   the global weight for the samples
         weights       :   the wieghts 'root file' dependent
@@ -626,7 +675,7 @@ class ShapeFactory:
         #print "_filterTrees cut = ",cut
         numTree = 0
 
-        for tree in inputs:
+        for itree, tree in enumerate(inputs):
           globalCut = "(" + cut + ") * (" + global_weight + ")"  
           #print "_filterTrees globalCut = ",globalCut
           # if weights vector is not given, do not apply file dependent weights
@@ -638,8 +687,13 @@ class ShapeFactory:
           #print " '>> myList'+'_'+str(numTree)+'_'+sampleName+'_'+cutName = ", '>> myList'+'_'+str(numTree)+'_'+sampleName+'_'+cutName
           #print " ::: ", tree.GetEntries(),
           # clear list
+          # GIULIO do not clear the pruner list
           tree.SetEntryList(0)
           # get the list
+          if len(evlists):
+            print "applying the following event list to the input tree", tree.GetFile().GetName()
+            evlists[itree].Print()
+            tree.SetEventList(evlists[itree])
           myList = ROOT.TEventList('myList'+'_'+str(numTree)+'_'+sampleName+'_'+cutName,"")
           #myList = ROOT.TEntryList('myList'+'_'+str(numTree)+'_'+sampleName+'_'+cutName,"")
           #myList = ROOT.TEntryList(tree)
@@ -655,13 +709,13 @@ class ShapeFactory:
           #tree.SetEntryList(myList)
           tree.SetEventList(myList)
           #print " AFTER List --> ", tree.GetEntries()
-          
+          print "filtered."   
           numTree += 1
 
 
           
     # _____________________________________________________________________________
-    def _draw(self, var, rng, global_weight, weights, cut, sampleName, inputs, doFold, cutName, variableName):       
+    def _draw(self, var, rng, global_weight, weights, cut, sampleName, inputs, doFold, cutName, variableName, sample, fixZeros):       
         '''
         var           :   the variable to plot
         rng           :   the variable to plot
@@ -727,10 +781,20 @@ class ShapeFactory:
         hTotalFinal.SetName('histo_' + sampleName)
         
         # fix negative (almost never happening)
-        # don't do it here, because you may have interference that is actually negative!
-        #for ibin in range(1, hTotalFina.GetNbinsX()+1)
+        # don't do it here by default, because you may have interference that is actually negative!
+        # do this only if triggered: use with caution!
+        # This also checks that only in specific phase spaces this is activated, "cutName"
+        #
+        # To be used with caution -> do not use this option if you don't know what you are playing with
+        #
+        if fixZeros and 'suppressNegative' in sample.keys() and ( cutName in sample['suppressNegative'] or 'all' in sample['suppressNegative']) :        
+          self._fixNegativeBinAndError(hTotalFinal)
+
+        # for ibin in range(1, hTotalFina.GetNbinsX()+1)
           #if hTotalFinal.GetBinContent(ibin) < 0 :
             #hTotalFinal.SetBinContent(ibin, 0) 
+        
+
         
         return hTotalFinal
 
@@ -910,8 +974,31 @@ class ShapeFactory:
         # same sign, because combine cannot handle it otherwise!
        
         for ibin in range(1, histoNew.GetNbinsX()+1) :
+          # Why ? 
           if histoNew.GetBinContent(ibin) * histoReference.GetBinContent(ibin) < 0 :
-            histoNew.SetBinContent(ibin, 0) 
+            histoNew.SetBinContent(ibin, histoReference.GetBinContent(ibin) * 0.0001)  # do not put 0 to avoid bogus pogus ...
+          # I think this is correct fix to our BOGUS problem
+	  if histoNew.GetBinContent(ibin) == 0 and not histoReference.GetBinContent(ibin) == 0 :
+            histoNew.SetBinContent(ibin, histoReference.GetBinContent(ibin) * 0.0001)  # do not put 0 to avoid bogus pogus ...
+          if not histoNew.GetBinContent(ibin) == 0 and histoReference.GetBinContent(ibin) == 0 :
+            histoNew.SetBinContent(ibin, 0)
+
+    # _____________________________________________________________________________
+    def _fixNegativeBinAndError(self, histogram_to_be_fixed):
+        # if a histogram has a bin < 0
+        # then put the gin content to 0
+        # and also if a histogram has uncertainties that go <0, 
+        # then put the uncertainty to the maximum allowed
+       
+        for ibin in range(1, histogram_to_be_fixed.GetNbinsX()+1) :
+          if histogram_to_be_fixed.GetBinContent(ibin)  < 0 :
+            histogram_to_be_fixed.SetBinContent(ibin, 0) 
+
+        # the SetBinError does not allow asymmetric -> fine, maximum uncertainty set
+        for ibin in range(1, histogram_to_be_fixed.GetNbinsX()+1) :
+          if histogram_to_be_fixed.GetBinContent(ibin) - histogram_to_be_fixed.GetBinErrorLow(ibin)  < 0 :
+            histogram_to_be_fixed.SetBinError(ibin, histogram_to_be_fixed.GetBinContent(ibin))   
+
 
     # _____________________________________________________________________________
     def _getBaseW(self, histo):
@@ -1020,9 +1107,13 @@ class ShapeFactory:
        
  
     # _____________________________________________________________________________
-    def _connectInputs(self, samples, inputDir, skipMissingFiles, friendsDir = None):
+    def _connectInputs(self, samples, inputDir, skipMissingFiles, friendsDir = None, skimListDir = None):
         inputs = {}
-        treeName = 'latino'
+        lists = {}
+        treeName = self._treeName
+	if "sdfarm" in os.uname()[1]:
+	  inputDir = inputDir.replace("xrootd","xrd")
+        print "doing", inputDir
         for process,filenames in samples.iteritems():
           
           # if the filenames start with "###" the folder will be reset
@@ -1033,23 +1124,32 @@ class ShapeFactory:
           
           
           #                                            use inputDir if no "###"           otherwise     just use f (after removing the "###" from the name)
-          tree = self._buildchain(treeName, [ (inputDir + '/' + f)       if '###' not in f     else     f.replace("#", "")           for f in filenames],      skipMissingFiles)
-          #tree = self._buildchain(treeName, [ (inputDir + '/' + f) for f in filenames], skipMissingFiles)
+          lists[process] = []
+          trees = self._buildchain(treeName, [ (inputDir + '/' + f)       if '###' not in f     else     f.replace("#", "")           for f in filenames],      skipMissingFiles)
+          # if we specify a friends tree directory we need to load the friend treaes and attch them 
           if friendsDir != None:
-            eventlists = self._geteventlists("prunerlist",  tree)
             friendTrees = self._buildchain(treeName, [ (friendsDir + '/' + f)       if '###' not in f     else     f.replace("#", "")           for f in filenames], False)
             ifriend = 0
             for friendTree in friendTrees:
-              friendTree.SetEventList(eventlists[ifriend])
-              ROOT.gROOT.cd()
-              print "Skimming tree accroring to selection stored in prunerlist"
-              friendTreeSkimmed = friendTree.CopyTree("")
-              tree[ifriend].AddFriend(friendTreeSkimmed)
-          inputs[process] = tree
+              # consistency check. The friend must have the same number of entries as the tree
+              if friendTree.GetEntries() != trees[ifriend].GetEntries():
+                raise RuntimeError('tree '+trees[ifriend].GetFile().GetName()+" and friend tree "+friendTree.GetFile().GetName()+" have different number of entries. you may have messed up your configuration")
+ 
+              trees[ifriend].AddFriend(friendTree)
+          #if we specify a directory with skim event lists we need to load them and skim    
+          if skimListDir != None:
+            eventlists = self._geteventlists("prunerlist",  [(skimListDir + '/' + f)       if '###' not in f     else     f.replace("#", "")           for f in filenames])
+            lists[process] = eventlists
+            for itree, tree in enumerate(trees):
+              print eventlists[itree]
+              eventlists[itree].Print()
+              tree.SetEventList(eventlists[itree])
+              
+          inputs[process] = trees
           
           # FIXME: add possibility to add Friend Trees for new variables   
          
-        return inputs
+        return inputs, lists
 
     # _____________________________________________________________________________
     def _disconnectInputs(self,inputs):
@@ -1078,6 +1178,19 @@ class ShapeFactory:
       if 'maite.iihe.ac.be' in path: 
         return os.path.exists(path.split('dcap://maite.iihe.ac.be/')[1])
 
+    def _test_sdfarm_File(self,path): 
+      if 'cms-xrdr.sdfarm.kr' in path:
+	if 'xrd//store' in path:
+	  cmd = 'xrd cms-xrdr.sdfarm.kr existfile /xrd/store/'+path.split('xrd//store/')[1]
+	  #cmd = 'gfal-ls -l srm://cms-se.sdfarm.kr:8443/srm/v2/server?SFN=/xrootd/store/'+path.split('xrd//store/')[1]
+	elif 'xrd/store' in path:
+	  cmd = 'xrd cms-xrdr.sdfarm.kr existfile /xrd/store/'+path.split('xrd/store/')[1]
+	  #cmd = 'gfal-ls -l srm://cms-se.sdfarm.kr:8443/srm/v2/server?SFN=/xrootd/store/'+path.split('xrd/store/')[1]
+	else : return False
+	print 'checking ', cmd
+	if os.system(cmd) == 0 : return True 
+	else: return False
+      else: return False
 
 
     # _____________________________________________________________________________
@@ -1098,6 +1211,11 @@ class ShapeFactory:
                 if not skipMissingFiles : raise RuntimeError('File '+path+' doesn\'t exists')
 	    elif "cluster142.knu.ac.kr" in path:
 	      pass # already checked the file at mkShape.py
+            elif "sdfarm" in path:
+              if not self._test_sdfarm_File(path):
+                print 'File '+path+' doesn\'t exists @ sdfarm.kr'
+                doesFileExist = False
+                if not skipMissingFiles : raise RuntimeError('File '+path+' doesn\'t exists')
             else:
               if not os.path.exists(path):
                 print 'File '+path+' doesn\'t exists'
@@ -1110,11 +1228,32 @@ class ShapeFactory:
         return listTrees
 
     # _____________________________________________________________________________
-    def _geteventlists(self, listName, trees):
+    def _geteventlists(self, listName, files):
       lists = []
-      for tree in trees:
-        filein = tree.GetFile()
-        evlist = filein.Get(listName)
+      if not hasattr(self, 'filesToKeepAround'):
+        self.filesToKeepAround = []
+      for path in files:
+        doesFileExist = True
+        self._logger.debug('     '+str(os.path.exists(path))+' '+path)
+        if "eoscms.cern.ch" in path or "eosuser.cern.ch" in path:
+          if not self._testEosFile(path):
+            print 'File '+path+' doesn\'t exists'
+            doesFileExist = False
+            raise RuntimeError('File '+path+' doesn\'t exists')
+        elif "maite.iihe.ac.be" in path:
+          if not self._testIiheFile(path):
+            print 'File '+path+' doesn\'t exists @ IIHE'
+            doesFileExist = False
+            raise RuntimeError('File '+path+' doesn\'t exists')
+        elif "cluster142.knu.ac.kr" in path:
+          pass # already checked the file at mkShape.py
+        else:
+          if not os.path.exists(path):
+            print 'File '+path+' doesn\'t exists'
+            doesFileExist = False
+            raise RuntimeError('File '+path+' doesn\'t exists')
+        self.filesToKeepAround.append(ROOT.TFile(path))
+        evlist = self.filesToKeepAround[-1].Get(listName)
         lists.append(evlist)
 
       return lists

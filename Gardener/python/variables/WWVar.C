@@ -112,6 +112,16 @@ public:
  float drllOneThree();
  float drllTwoThree();
  
+ //---- for VBF training
+ float ptTOT_cut();
+ float mTOT_cut();
+ float OLV1_cut();
+ float OLV2_cut();
+ float Ceta_cut();
+ 
+//whss
+ float mlljj20_whss();
+ float mlljj30_whss();
  
 private:
  //! variables
@@ -522,6 +532,53 @@ float WW::dphilljetjet_cut(){
   return -1.0;
  }
 }
+
+float WW::ptTOT_cut(){
+ if (_isOk && _jetOk >= 2 && J1.Pt()>15.0 && J2.Pt()>15.0) {
+   return  fabs( (L1+L2+J1+J2+MET).Pt() );
+ }
+ else {
+  return -1.0;
+ }
+}
+
+float WW::mTOT_cut(){
+ if (_isOk && _jetOk >= 2 && J1.Pt()>15.0 && J2.Pt()>15.0) {
+   return  fabs( (L1+L2+J1+J2+MET).M() );
+ }
+ else {
+  return -1.0;
+ }
+}
+
+float WW::OLV1_cut(){
+ if (_isOk && _jetOk >= 2 && J1.Pt()>15.0 && J2.Pt()>15.0) {
+   return  2 * abs(((L1.Eta()-((J1.Eta()+J2.Eta())/2))/(J1.Eta()-J2.Eta())));
+ }
+ else {
+  return -1.0;
+ }
+}
+
+float WW::OLV2_cut(){
+ if (_isOk && _jetOk >= 2 && J1.Pt()>15.0 && J2.Pt()>15.0) {
+   return  2 * abs(((L2.Eta()-((J1.Eta()+J2.Eta())/2))/(J1.Eta()-J2.Eta())));
+ }
+ else {
+  return -1.0;
+ }
+}
+
+float WW::Ceta_cut(){
+
+ if (_isOk && _jetOk >= 2 && J1.Pt()>15.0 && J2.Pt()>15.0) {
+  return (OLV1_cut()+OLV2_cut());
+ }
+ else {
+  return -1.0;
+ }
+}
+
 
 float WW::dphilmet(){ 
  if (_isOk) {
@@ -1520,5 +1577,49 @@ float WW::drllTwoThree(){
  
 }
 
+//=== mass variable needed for WH same sign
 
+float WW::mlljj20_whss(){
+TLorentzVector tmpLV;
+if (_isOk && _jetOk >= 1 && J1.Pt()>30) {
+ float dphi1;
+ float dphi2;
+ float mass = 0.;
+   if(J2.Pt() > 20.) {
+   dphi1 = fabs(L1.DeltaPhi(J1+J2));
+   dphi2 = fabs(L2.DeltaPhi(J1+J2));
+     if(dphi1 <= dphi2) tmpLV = L1;
+     else tmpLV = L2;
+     mass =  ((tmpLV+tmpLV+J1+J2).M());
+   }
+   if(J2.Pt() < 20.) {
+   dphi1 = fabs(L1.DeltaPhi(J1));
+   dphi2 = fabs(L2.DeltaPhi(J1));
+     if(dphi1 <= dphi2) tmpLV = L1;
+     else tmpLV = L2;
+     mass =  ((tmpLV+tmpLV+J1).M());
+}
+return mass;
+}
+else {
+  return -9999.0;
+}
+}
 
+float WW::mlljj30_whss(){
+TLorentzVector tmpLV;
+if (_isOk && _jetOk >= 2 && J1.Pt()>30 && J2.Pt() > 30.) {
+ float dphi1;
+ float dphi2;
+ float mass = 0.;
+ dphi1 = fabs(L1.DeltaPhi(J1+J2));
+ dphi2 = fabs(L2.DeltaPhi(J1+J2));
+ if(dphi1 <= dphi2) tmpLV = L1;
+ else tmpLV = L2;
+      mass =  ((tmpLV+tmpLV+J1+J2).M());
+ return mass;
+}
+else {
+  return -9999.0;
+}
+}

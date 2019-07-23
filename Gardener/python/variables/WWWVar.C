@@ -32,6 +32,7 @@ public:
 
 // void setLeptons(std::vector<float> invectorpt, std::vector<float> invectoreta, std::vector<float> invectorphi, std::vector<float> invectorflavour);
  void setLeptons(std::vector<float> invectorpt, std::vector<float> invectoreta, std::vector<float> invectorphi, std::vector<float> invectorflavour, std::vector<float> invectorcharge); 
+ void setNotZLepton();
 
  void setMET  (float met, float metphi);
  void setTkMET(float met, float metphi);
@@ -69,10 +70,29 @@ public:
  float dphilmet2_wh3l();
  float dphilmet3_wh3l();
 
+ float pt12();
+ float pt13();
+ float pt23();
+ float ptbest();
+ 
+ float z4lveto();
+ float dmjjmW();
+ float mtw_notZ();
+ float pdgid_notZ();
+ float dphilmetjj();
+ float dphilmetj();
+ float mTlmetjj();
+ float pTlmetjj();
+ float pTlmetj();
+ float ptz();
+ float checkmZ();
 
 private:
  //! variables
  TLorentzVector L1,L2,L3;
+ TLorentzVector notZlep;	// for Zh
+ float pid_notZ;	// for Zh
+ TLorentzVector Zlep1, Zlep2;	// for Zh
  TLorentzVector MET;
  TLorentzVector J1, J2;
  float pid1, pid2;
@@ -160,6 +180,7 @@ WWW::WWW(float pt1, float pt2, float pt3, float eta1, float eta2, float eta3, fl
   L3.SetPtEtaPhiM(pt3, eta3, phi3, 0.);
   MET.SetPtEtaPhiM(met, 0, metphi, 0.);
   _isOk =  true;
+  setNotZLepton();
  }
  else {
   _isOk = false;
@@ -245,6 +266,7 @@ void WWW::checkIfOk() {
   }
   
  }
+ // cout << "At end of checkIfOk, _jetOk = " << _jetOk << endl;
  
 }
 
@@ -292,6 +314,8 @@ void WWW::setJets(std::vector<float> invectorpt, std::vector<float> invectoreta,
  else { 
   _jetOk = 0;  //---- protection
  }
+
+ // cout << "At end of setJetsA, _jetOk = " << _jetOk << endl;
 }
 
 void WWW::setJets(std::vector<float> invectorpt, std::vector<float> invectoreta, std::vector<float> invectorphi, std::vector<float> invectormass, std::vector<float> invectorbtag) {
@@ -314,6 +338,7 @@ void WWW::setJets(std::vector<float> invectorpt, std::vector<float> invectoreta,
  else {
   _jetOk = 0;  //---- protection
  }
+ // cout << "At end of setJetsB, _jetOk = " << _jetOk << endl;
 }
 
 
@@ -334,7 +359,65 @@ void WWW::setLeptons(std::vector<float> invectorpt, std::vector<float> invectore
  if ( _leptonspt.size() > 2 && _leptonspt.at(2) > 0 ) {
   L3.SetPtEtaPhiM(_leptonspt.at(2), _leptonseta.at(2), _leptonsphi.at(2), 0); //---- NB: leptons are treated as massless
  }
- 
+
+ setNotZLepton();
+}
+
+// Set not-Z-lepton (W candidate) for Zh 
+void WWW::setNotZLepton() {
+
+  float Zmass = 91.1876;
+
+  float L1Charge = _leptonsflavour.at(0);
+  float L2Charge = _leptonsflavour.at(1);
+  float L3Charge = _leptonsflavour.at(2);
+  float L1flavour = _leptonscharge.at(0);
+  float L2flavour = _leptonscharge.at(1);
+  float L3flavour = _leptonscharge.at(2);
+
+  // cout << endl;
+  // cout << "Charges " << L1Charge << " " << L2Charge << " " << L3Charge << endl;
+  // cout << "Flavours " << L1flavour << " " << L2flavour << " " << L3flavour << endl;
+
+  double dlep = 0.;
+  double mindlep = 99999.;
+
+  if((L1Charge * L2Charge < 0) && (fabs(L1flavour) == fabs(L2flavour))){
+    mindlep = fabs((L1 + L2).M()-Zmass);
+    // cout << "Z = L1+L2; m = " << (L1 + L2).M() << endl;
+    notZlep = L3;
+    Zlep1 = L1;
+    Zlep2 = L2;
+    pid_notZ = L3flavour;
+    // cout << "chose L3" << endl;
+  }
+
+  if((L2Charge * L3Charge < 0) && (fabs(L2flavour) == fabs(L3flavour))){
+    dlep = fabs((L2 + L3).M()-Zmass);
+    // cout << "Z = L2+L3; m = " << (L2 + L3).M() << endl;
+    if (dlep < mindlep) {
+      mindlep = dlep;
+      notZlep = L1;
+      Zlep1 = L2;
+      Zlep2 = L3;
+      pid_notZ = L1flavour;
+      // cout << "chose L1" << endl;
+    }
+  }
+
+  if((L1Charge * L3Charge < 0) && (fabs(L1flavour) == fabs(L3flavour))){
+    dlep = fabs((L1 + L3).M()-Zmass);
+    // cout << "Z = L1+L3; m = " << (L1 + L3).M() << endl;
+    if (dlep < mindlep) {
+      mindlep = dlep;
+      notZlep = L2;
+      Zlep1 = L1;
+      Zlep2 = L3;
+      pid_notZ = L2flavour;
+      // cout << "chose L2" << endl;
+    }
+  }
+
 }
 
 /*
@@ -354,7 +437,7 @@ void WWW::setLeptons(std::vector<float> invectorpt, std::vector<float> invectore
   L3.SetPtEtaPhiM(_leptonspt.at(2), _leptonseta.at(2), _leptonsphi.at(2), 0); //---- NB: leptons are treated as massless
  }
  
-}
+ }invectorflavour
 */
 
 //! functions
@@ -475,6 +558,31 @@ return dlep_sort[1];
  } 
 }
 
+float WWW::z4lveto(){
+
+  float Zmass = 91.1876;
+
+  if (_isOk) {
+
+    return fabs(mlll() - Zmass);
+
+  } else {
+    return -9999.0;
+  }
+}
+
+float WWW::dmjjmW() {
+
+  float Wmass = 80.4;
+  float mjj = 0.0;
+  if (_jetOk >= 2) {
+    mjj = (J1+J2).M();
+    return mjj-Wmass;
+  }
+
+  return -9999.0;
+}
+
 float WWW::zveto_3l(){
 float Zmass = 91.1876;
 
@@ -528,6 +636,24 @@ float dilep_diff3 = fabs(dlep3-Zmass);
  else {
   return -9999.0;
  }
+}
+
+float WWW::mtw_notZ(){
+
+  if (_isOk) {
+    return sqrt(2 * notZlep.Pt() * pfmet() * (1 - cos(fabs((notZlep).DeltaPhi(MET)))));
+  } else {
+    return -9999.0;
+  }
+}
+
+float WWW::pdgid_notZ(){
+
+  if (_isOk) {
+    return pid_notZ;
+  } else {
+    return -9999.0;
+  }
 }
 
 
@@ -704,6 +830,79 @@ float WWW::dphilllmet(){
  }
 }
 
+float WWW::mTlmetjj(){
+
+ if (_isOk && _jetOk >= 2) {
+   TLorentzVector WWvec = MET + notZlep + J1 + J2;
+   return  sqrt( pow(MET.Pt() + notZlep.Pt() + J1.Pt() + J2.Pt(),2) - pow(WWvec.Px(),2) - pow(WWvec.Py(),2));
+ }
+ else {
+  return -9999.0;
+ }
+}
+
+float WWW::pTlmetjj(){
+
+ if (_isOk && _jetOk >= 2 && J2.Pt() > 30) {
+   TLorentzVector WWvec = MET + notZlep + J1 + J2;
+   return  WWvec.Pt();
+ }
+ else {
+  return -9999.0;
+ }
+}
+
+float WWW::pTlmetj(){
+
+ if (_isOk && _jetOk >= 1 && J1.Pt() > 30) {
+   TLorentzVector WWvec = MET + notZlep + J1 + J2;
+   return  WWvec.Pt();
+ }
+ else {
+  return -9999.0;
+ }
+}
+
+float WWW::ptz() {
+
+  if (_isOk) {
+    return ((Zlep1 + Zlep2).Pt());
+  } else {
+    return -9999.0;
+  }
+
+}
+
+float WWW::checkmZ() {
+  if (_isOk) {
+    return ((Zlep1 + Zlep2).M());
+  } else {
+    return -9999.0;
+  }
+
+}
+
+float WWW::dphilmetjj(){
+
+ if (_isOk && _jetOk >= 2 && J2.Pt() > 30) {
+  return  fabs( (notZlep+MET).DeltaPhi(J1+J2) );
+ }
+ else {
+  return -9999.0;
+ }
+}
+
+float WWW::dphilmetj(){
+
+  // cout << "In dphilmetj, _isOk = " << _isOk << " and _jetOk = " << _jetOk << endl;
+ if (_isOk && _jetOk >= 1 && J1.Pt() > 30) {
+  return  fabs( (notZlep+MET).DeltaPhi(J1) );
+ }
+ else {
+  return -9999.0;
+ }
+}
+
 float WWW::ptlll(){
  if (_isOk) {
   return (L1+L2+L3).Pt();
@@ -822,3 +1021,114 @@ float WWW::dphilmet3_wh3l(){
   return -9999.0;
  }
 }
+
+
+
+//---- pt di-lepton combinations
+
+float WWW::pt12(){
+  if (_isOk) {
+    return (L1+L2).Pt();
+  }
+  else {
+    return -9999.0;
+  }
+}
+
+
+
+float WWW::pt13(){
+  if (_isOk) {
+    return (L1+L3).Pt();
+  }
+  else {
+    return -9999.0;
+  }
+}
+
+
+float WWW::pt23(){
+  if (_isOk) {
+    return (L2+L3).Pt();
+  }
+  else {
+    return -9999.0;
+  }
+}
+
+
+
+
+
+float WWW::ptbest(){
+  if (_isOk) {
+    
+    float ch1 = _leptonsflavour.at(0);
+    float ch2 = _leptonsflavour.at(1);
+    float ch3 = _leptonsflavour.at(2);
+      
+    //     1 2 3  pt ordered
+    //##   + + -       --> (2,3)  or   (1,3)
+    //##   + - -       --> (1,2)  or   (1,3)
+    //##   + - +       --> (1,2)  or   (2,3)
+    
+    //##   - + -       --> (1,2)  or   (2,3)
+    //##   - - +       --> (1,3)  or   (2,3)
+    //##   - + +       --> (1,2)  or   (1,3)
+    
+    
+    //
+    // if possible, pick the lowest pt as one of the leptons from H>WW>lvlv, due to off-shell-ness
+    //
+    //##   + + -       --> (2,3)  or   (1,3)
+    //##   + - -       -->             (1,3)
+    //##   + - +       -->             (2,3)
+    
+    //##   - + -       -->             (2,3)
+    //##   - - +       --> (1,3)  or   (2,3)
+    //##   - + +       -->             (1,3)
+    
+    
+    //
+    // in case you have 2 configurations, pick the highest pt pair
+    //
+    
+    //##   + + -       --> (2,3)  or   (1,3)   A
+    //##   + - -       -->             (1,3)   C
+    //##   + - +       -->             (2,3)   B
+    
+    //##   - + -       -->             (2,3)   B
+    //##   - - +       --> (1,3)  or   (2,3)   A
+    //##   - + +       -->             (1,3)   C
+    
+    
+    if (ch1 * ch2 > 0) {   // ---> A
+      
+      float pt23 = (L2+L3).Pt();
+      float pt13 = (L1+L3).Pt();
+      
+      if (pt13 > pt23) return pt13;
+      else return pt23;
+      
+    }
+    else {
+      // ---> B
+      if (ch1 * ch3 > 0)     
+        return (L2+L3).Pt();
+      else 
+        // ---> C
+        return (L1+L3).Pt();
+    }
+    
+    
+  }
+  else {
+    return -9999.0;
+  }
+}
+
+
+
+
+
+

@@ -16,7 +16,7 @@ from LatinoAnalysis.Gardener.variables.triggerMaker               import trigger
 # id/isolation scale factors
 from LatinoAnalysis.Gardener.variables.idisoScaleFactors          import IdIsoSFFiller
 from LatinoAnalysis.Gardener.variables.multiIdisoScaleFactors     import MultiIdIsoSFFiller
-
+from LatinoAnalysis.Gardener.variables.LeptonEtaPtCorrFactors     import LeptonEtaPtCorrFactors
 
 # selections
 from LatinoAnalysis.Gardener.variables.l2Sel                      import L2SelFiller
@@ -33,6 +33,9 @@ from LatinoAnalysis.Gardener.variables.l4Kin                      import L4KinFi
 from LatinoAnalysis.Gardener.variables.fakeWeight                 import FakeWeightFiller
 from LatinoAnalysis.Gardener.variables.multiFakeWeight            import multiFakeWeightFiller
 
+# Charge Flip VBS
+from LatinoAnalysis.Gardener.variables.chargeFlipWeightVBS        import chargeFlipWeightVBS
+
 
 # lepton pt corrector
 from LatinoAnalysis.Gardener.variables.lepScaleCorrector          import LeptonPtCorrector
@@ -45,6 +48,9 @@ from LatinoAnalysis.Gardener.variables.qq2vvEWKcorrectionsWeight  import qq2vvEW
 from LatinoAnalysis.Gardener.variables.qq2wzEWKcorrectionsWeight  import qq2wzEWKcorrectionsWeightFiller
 from LatinoAnalysis.Gardener.variables.qq2zzEWKcorrectionsWeight  import qq2zzEWKcorrectionsWeightFiller
 
+# rochester corrections to muon pt
+from LatinoAnalysis.Gardener.variables.rochester_corrections       import rochester_corr
+
 # new variables
 from LatinoAnalysis.Gardener.variables.WW2jVar                    import WW2jVarFiller
 from LatinoAnalysis.Gardener.variables.WWVar                      import WWVarFiller
@@ -53,12 +59,15 @@ from LatinoAnalysis.Gardener.variables.DMVar                      import DMVarFi
 from LatinoAnalysis.Gardener.variables.XWWVar                     import XWWVarFiller
 from LatinoAnalysis.Gardener.variables.dymvaVar                   import DymvaVarFiller
 from LatinoAnalysis.Gardener.variables.dymvaHiggs                 import DymvaHiggsFiller
+#from LatinoAnalysis.Gardener.variables.VBF_DNNvar                 import DNNvarFiller
+#from LatinoAnalysis.Gardener.variables.VBF_DNNvarv1               import DNNvarFillerv1
 
 from LatinoAnalysis.Gardener.variables.chargeFlipWeight           import chargeFlipWeight
 # mucca
 from LatinoAnalysis.Gardener.variables.muccaMvaVar                import MuccaMvaVarFiller
 from LatinoAnalysis.Gardener.variables.muccaMonoHVar              import MuccaMonoHVarFiller
 from LatinoAnalysis.Gardener.variables.muccaMonoHFullVar          import MuccaMonoHFullVarFiller
+from LatinoAnalysis.Gardener.variables.muccaMonoHFullVarHigh      import MuccaMonoHFullVarHighFiller
 
 # mrww
 from LatinoAnalysis.Gardener.variables.MrWWVar                    import MrWWVarFiller   
@@ -118,6 +127,19 @@ from LatinoAnalysis.Gardener.variables.reweightHHH                import genRewe
 # generic formula adder
 from LatinoAnalysis.Gardener.variables.genericFormulaAdder        import genericFormulaAdder
 
+# generic TMVA
+from LatinoAnalysis.Gardener.variables.genericTMVA        import GenericTMVAFiller
+
+# Prefiring
+from LatinoAnalysis.Gardener.variables.PrefireCorr_gardener          import PrefCorr
+
+# jet pairs identification
+from LatinoAnalysis.Gardener.variables.JetPairingGenVBS             import JetPairingGenVBS
+from LatinoAnalysis.Gardener.variables.JetPairingVBS                import JetPairingVBS
+from LatinoAnalysis.Gardener.variables.JetPairingHH                import JetPairingHH
+from LatinoAnalysis.Gardener.variables.JetPairingGenHH             import JetPairingGenHH
+from LatinoAnalysis.Gardener.variables.VBSjjlnu_kin                  import VBSjjlnu_kin
+
 if __name__ == '__main__':
 
     print "gardener"
@@ -146,6 +168,7 @@ if __name__ == '__main__':
 # id/isolation scale factors
     modules['idisofiller'] = IdIsoSFFiller()
     modules['multiidiso']  = MultiIdIsoSFFiller()
+    modules['etaptlepsf']  = LeptonEtaPtCorrFactors()
 
 # specific variables for MC
 
@@ -167,7 +190,9 @@ if __name__ == '__main__':
     modules['dmvarfiller']      = DMVarFiller()
     modules['xwwvarfiller']     = XWWVarFiller()
     modules['dymvaVarFiller']   = DymvaVarFiller()
-    modules['dymvaHiggsFiller']   = DymvaHiggsFiller()
+    modules['dymvaHiggsFiller'] = DymvaHiggsFiller()
+  #  modules['vbfdnnvarFiller']  = DNNvarFiller()
+ #   modules['vbfdnnvarFillerv1']= DNNvarFillerv1()
 
 # Charge Flip
     modules['chFlipProba']      = chargeFlipWeight()
@@ -176,6 +201,7 @@ if __name__ == '__main__':
     modules['muccaMvaVarFiller']       = MuccaMvaVarFiller()
     modules['muccaMonoHVarFiller']     = MuccaMonoHVarFiller()
     modules['muccaMonoHFullVarFiller'] = MuccaMonoHFullVarFiller()
+    modules['muccaMonoHFullVarHighFiller'] = MuccaMonoHFullVarHighFiller()
 
 # mrWW
     modules['mrWWvarfiller']   = MrWWVarFiller()
@@ -191,6 +217,9 @@ if __name__ == '__main__':
     modules['wzEWKcorrections']      =  qq2wzEWKcorrectionsWeightFiller()
     modules['zzEWKcorrections']      =  qq2zzEWKcorrectionsWeightFiller()
 
+#add rochester weight for muon pt 
+    modules['rochester'] = rochester_corr()
+    
 # add bpog SF
     modules['btagPogScaleFactors']   = btagPogScaleFactors()
     modules['allBtagPogScaleFactors'] = allBtagPogScaleFactors()
@@ -210,6 +239,13 @@ if __name__ == '__main__':
     modules['l3kinfiller']     = L3KinFiller()
     modules['l4kinfiller']     = L4KinFiller()
 
+# jet pairing
+    modules['JetPairingGenVBS']   = JetPairingGenVBS()
+    modules['JetPairingVBS']      = JetPairingVBS()
+    modules['JetPairingGenHH']    = JetPairingGenHH()
+    modules['JetPairingHH']       = JetPairingHH()
+    modules['VBSjjlnu_kin']       = VBSjjlnu_kin()
+
 # Nuisances
     modules['JESTreeMaker']           = JESTreeMaker()
     modules['LeppTScalerTreeMaker']   = LeppTScalerTreeMaker()
@@ -224,6 +260,7 @@ if __name__ == '__main__':
 # fake weights
     modules['fakeWeights']      = FakeWeightFiller()
     modules['multiFakeWeights']      = multiFakeWeightFiller()
+    modules['chargeFlipWeightVBS']      = chargeFlipWeightVBS()
 
 # lepton pt corrector
     modules['letPtCorrector']   = LeptonPtCorrector()
@@ -249,7 +286,11 @@ if __name__ == '__main__':
 # generic formula adder
     modules['genericFormulaAdder'] = genericFormulaAdder()
 
+# generic TMVA
+    modules['genericTMVA'] = GenericTMVAFiller()
 
+# Prefiring
+    modules['prefcorrMiniAOD']   = PrefCorr()
 
     gardener_cli( modules )
 

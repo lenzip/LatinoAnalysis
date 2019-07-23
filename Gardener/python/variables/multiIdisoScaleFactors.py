@@ -38,15 +38,16 @@ class LeptonSF():
         self.WPType = WPType
         self.WP     = WP
 
-        self.minpt_mu = 10
-        self.maxpt_mu = 200
-        self.mineta_mu = -2.4
-        self.maxeta_mu = 2.4
+        # for rounding issues of TH2F, actually only maxeta_ele=2.5 causes a problem
+        self.minpt_mu = 10.0001
+        self.maxpt_mu = 199.9999
+        self.mineta_mu = -2.3999
+        self.maxeta_mu = 2.3999
 
-        self.minpt_ele = 10
-        self.maxpt_ele = 200
-        self.mineta_ele = -2.5
-        self.maxeta_ele = 2.5
+        self.minpt_ele = 10.0001
+        self.maxpt_ele = 199.9999
+        self.mineta_ele = -2.4999
+        self.maxeta_ele = 2.4999
 
         # Tracker SF
 
@@ -340,10 +341,12 @@ class LeptonSF():
         if kindLep == 'mu' :
                 # Iso
                 tag = 'mu_iso_RR'+str(nRun)
+                #print eta,pt
                 for point in self.idIsoScaleFactors[tag+'_DATA'] :
                   if ( eta >= float(point[0]) and eta <= float(point[1]) and         # the "=" in both directions is only used by the overflow bin
                        pt  >= float(point[2]) and pt  <= float(point[3]) ) :         # in other cases the set is (min, max]
                      dataIso = point
+                 #    print  dataIso
                      break
                 for point in self.idIsoScaleFactors[tag+'_MC'] :
                   if ( eta >= float(point[0]) and eta <= float(point[1]) and         # the "=" in both directions is only used by the overflow bin

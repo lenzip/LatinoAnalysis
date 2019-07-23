@@ -4,6 +4,8 @@ eosTargBaseIn = '/eos/user/x/xjanssen/HWW2015/'
 eosTargBaseOut= '/eos/user/x/xjanssen/HWW2015/'
 
 
+
+
 # ---- production to run on
 # .... .... this is defined by mkGardener in "-p" "--prods" option
 
@@ -1345,6 +1347,59 @@ Productions= {
                         'puData'  : '/u/user/salee/Latino/PUdata/PileupHistogram_Full2016_271036-284044_69p2mb_31Jan17.root',
                        },
 
+  'Apr2017_summer16_SingleLepton_hercules'   : {
+                        'isData'  : False ,
+                        'samples' : 'LatinoTrees/AnalysisStep/test/crab/samples/samples_summer16.py' ,
+                        'dir'     : '/group/OneLepton/Apr2017_summer16/',
+                        'dirExt'  : 'LatinoTrees' ,
+                        'cmssw'   : 'Full2016' ,
+                        # 37.X fb-1
+                        'puData'  : '/gwteras/cms/store/group/OneLepton/puData_Full',
+                        'onlySamples': [
+                             'DYJetsToLL_M-10to50-LO','ST_s-channel','ST_t-channel_antitop',
+                             'ST_t-channel_top','ST_tW_antitop_noHad_ext1','ST_tW_antitop_noHad',
+                             'ST_tW_antitop','ST_tW_top_noHad_ext1','ST_tW_top_noHad','ST_tW_top',
+                             'ttHToNonbb_M125','TTTo2L2Nu','TTToSemiLepton','TTWJetsToLNu_ext2','TTWJetsToLNu',
+                             'TTWJetsToQQ','Wg_AMCNLOFXFX','Wg_MADGRAPHMLM','WgStarLNuEE','WgStarLNuMuMu',
+                             'WJetsToLNu_HT100_200_ext1','WJetsToLNu_HT100_200_ext2','WJetsToLNu_HT100_200',
+                             'WJetsToLNu_HT1200_2500_ext1','WJetsToLNu_HT200_400_ext1','WJetsToLNu_HT200_400_ext2',
+                             'WJetsToLNu_HT200_400','WJetsToLNu_HT2500_inf_ext1','WJetsToLNu_HT2500_inf',
+                             'WJetsToLNu_HT400_600_ext1','WJetsToLNu_HT400_600','WJetsToLNu_HT600_800_ext1',
+                             'WJetsToLNu_HT600_800','WJetsToLNu_HT800_1200_ext1','WJetsToLNu',
+                             'WLLJJToLNu_M-4To50_QCD_0Jet','WLLJJToLNu_M-4To50_QCD_1Jet','WLLJJToLNu_M-4To50_QCD_2Jet',
+                             'WLLJJToLNu_M-4To50_QCD_3Jet','WLLJJToLNu_M-4To50_QCD_4Jet','WLLJJToLNu_M-4To60_EWK_4F',
+                             'WLLJJToLNu_M-50_QCD_0Jet','WLLJJToLNu_M-50_QCD_1Jet','WLLJJToLNu_M-50_QCD_2Jet',
+                             'WLLJJToLNu_M-50_QCD_3Jet','WLLJJToLNu_M-60_EWK_4F','WWTo2L2Nu_aTGC_0-400','WWTo2L2Nu_aTGC_400-600',
+                             'WWTo2L2Nu_aTGC_600-800','WWTo2L2Nu_aTGC_800-Inf','WWTo2L2Nu','WWW','WWZ','WZJJ_EWK_QCD',
+                             'WZTo1L1Nu2Q','WZTo1L3Nu','WZTo2L2Q','ZZTo2L2Q','ZZZ'
+                        ]
+                       },
+                       
+                       
+                       
+  #### VBS semileptonic MC production Run2_2016
+
+  'VBS_semileptonic_signal_summer16' : {
+                          'isData': False,
+                          'samples': 'LatinoTrees/AnalysisStep/test/crab/samples/samples_VBS_semileptonic_2016.py',
+                          'dir':      "/group/OneLepton/VBS_semileptonic_signal_summer16/",
+                          'dirExt'  : 'LatinoTrees' ,
+                          'cmssw'   : 'Full2016' ,
+                        # 37.X fb-1
+                          'puData'  : '/gwteras/cms/store/group/OneLepton/puData_Full'
+                       },
+
+  ### HHWWbb semileptonic Run2_2016
+  'HHWWbb_semileptonic_signal_summer16' : {
+                          'isData': False,
+                          'samples': 'LatinoTrees/AnalysisStep/test/crab/samples/list_MC_HHWWbb_semileptonic_2016.py',
+                          'dir':      "/group/OneLepton/HHWWbb_semileptonic_signal_summer16/",
+                          'dirExt'  : 'LatinoTrees' ,
+                          'cmssw'   : 'Full2016' ,
+                        # 37.X fb-1
+                          'puData'  : '/gwteras/cms/store/group/OneLepton/puData_Full'
+                       },
+
 
 }
 
@@ -1354,7 +1409,8 @@ Productions= {
 # .... .... this is defined by mkGardener in "-s" "--steps" option
 # .... .... if it is a "chain", it means that the intermediate steps are NOT saved
 # .... ....    e.g. 'puadder','baseW','wwNLL' ---> only after all steps the folder will be saved on eos
-
+VBS_HH_semilep_samples = ['WpToLNu_WmTo2J','WpTo2J_WmToLNu','WpToLNu_WpTo2J','WmToLNu_WmTo2J',
+                          'WpToLNu_ZTo2J','WpTo2J_ZTo2L','WmToLNu_ZTo2J','WmTo2J_ZTo2L','ZTo2L_ZTo2J', 'HH_bblnjj']
 
 samples4Syst = [
                  # DY 
@@ -1383,19 +1439,23 @@ samples4Syst = [
                  'ST_t-channel_antitop','ST_t-channel_top',
                  'ST_tW_antitop','ST_tW_top',
                  'ST_tW_antitop_noHad' , 'ST_tW_antitop_noHad_ext1' , 'ST_tW_top_noHad' , 'ST_tW_top_noHad_ext1' ,
+                 'TTZjets',
 
                  # VV (including WW) 
                  'WWTo2L2Nu','GluGluWWTo2L2Nu_MCFM','GluGluWWTo2L2NuHiggs_MCFM',
                  'WZTo3LNu','WZ','WZTo2L2Q','WZTo3LNu_mllmin01',
                  'ZZ','ZZTo2L2Nu','ZZTo2L2Q','ZZTo4L',
-                 'Wg_AMCNLOFXFX','WgStarLNuEE','WgStarLNuMuMu', 'Wg_MADGRAPHMLM', 'Zg' ,
+                 'Wg_AMCNLOFXFX','WgStarLNuEE','WgStarLNuMuMu', 'Wg_MADGRAPHMLM', 'Zg' , 'WZTo3LNu_mllmin01_ext1',
+
+                 # qq->WW aTCG
+                 'WWTo2L2Nu_aTGC_0-400','WWTo2L2Nu_aTGC_400-600','WWTo2L2Nu_aTGC_600-800','WWTo2L2Nu_aTGC_800-Inf',
 
                  # VVV
                  'WZZ','ZZZ','WWZ','WWW','WWG',
 
                  # Higgs 
                  'GluGluHToTauTau_M125' , 'GluGluHToWWTo2L2Nu_M125','GluGluHToWWTo2L2NuPowheg_M125',
-                 'GluGluHToWWTo2L2Nu_alternative_M125', 'GluGluHToWWTo2L2Nu_M125_minloHJ_NNLOPS' ,
+                 'GluGluHToWWTo2L2Nu_alternative_M125', 'GluGluHToWWTo2L2Nu_M125_minloHJ_NNLOPS' , 'GluGluHToWWTo2L2Nu_minloHJJ_M125',
                  'VBFHToTauTau_M125' , 'VBFHToWWTo2L2Nu_M125','VBFHToWWTo2L2Nu_alternative_M125',
                  'HWminusJ_HToTauTau_M125', 'HWminusJ_HToWW_M125', 'HWminusJ_HToWW_LNu_M125' ,
                  'HWplusJ_HToTauTau_M125' , 'HWplusJ_HToWW_M125',  'HWplusJ_HToWW_LNu_M125' ,
@@ -1406,6 +1466,23 @@ samples4Syst = [
 
                  'GluGluZH_HToWWTo2L2Nu_M120','GluGluZH_HToWWTo2L2Nu_M125','GluGluZH_HToWWTo2L2Nu_M130', # ggZH for monohiggs
                  'HZJ_HToWWTo2L2Nu_M120','HZJ_HToWWTo2L2Nu_M125','HZJ_HToWWTo2L2Nu_M130', # ZH for monohiggs
+
+                 'ttHJetToNonbb_M125','ttHToNonbb_M125',
+
+                 # Spin samples
+                  'H0L1_ToWWTo2L2Nu',
+                  'H0L1f05_ToWWTo2L2Nu',
+                  'H0M_ToWWTo2L2Nu',
+                  'H0Mf05_ToWWTo2L2Nu',
+                  'H0PH_ToWWTo2L2Nu',
+                  'H0PHf05_ToWWTo2L2Nu',
+                  'H0PM_ToWWTo2L2Nu',
+                  'VBF_H0L1_ToWWTo2L2Nu',
+                  'VBF_H0L1f05_ToWWTo2L2Nu',
+                  'VBF_H0M_ToWWTo2L2Nu',
+                  'VBF_H0Mf05_ToWWTo2L2Nu',
+                  'VBF_H0PH_ToWWTo2L2Nu',
+                  'VBF_H0PHf05_ToWWTo2L2Nu',
                  
                  # What ????
                  #'ttHJetToNonbb_M125','TTWJetsToLNu',
@@ -1636,24 +1713,7 @@ Steps= {
                   'isChain'    : True ,
                   'do4MC'      : True ,
                   'do4Data'    : False,
-                  'subTargets' : ['wwNLL','genVariables','genMatchVariables','BWEwkSinglet','wwEWK','wzEWK','zzEWK','ggHUnc'] #,'BWEwkSinglet_JHUGen698','TopGenPt'],
-                },
-
-  'MCWeightsCorr'  :       {
-                  'isChain'    : True ,
-                  'do4MC'      : True ,
-                  'do4Data'    : False,
-                  'subTargets' : ['ggHUnc','genMatchVariables','BWEwkSinglet']
-                },
-
-
-
-  'MCFix' :  {
-                  'isChain'    : True ,
-                  'do4MC'      : True ,
-                  'do4Data'    : False,
-                  #'subTargets' : ['baseW','bPogSF','ggHUnc','formulasMC'],
-                  'subTargets' : ['baseW','formulasMC'],
+                  'subTargets' : ['wwNLL','genVariables','genMatchVariables','BWEwkSinglet','wwEWK','wzEWK','zzEWK','ggHUnc','ggHtoMINLO'] #,'BWEwkSinglet_JHUGen698','TopGenPt'],
                 },
 
 
@@ -1844,9 +1904,10 @@ Steps= {
                   #OLD 'subTargets' : ['do_WgStarsel','puadder','pu2p6','pu4p3','pu6p3','baseW','wwNLL','genVariables','genMatchVariables','wwEWK','wzEWK','zzEWK'],
                   'subTargets' : ['baseW','do_WgStarsel'],
                   'onlySample' : [
-                                   'Wg500','Wg_AMCNLOFXFX','WZTo3LNu','WgStarLNuEE','WgStarLNuMuMu','Wg_MADGRAPHMLM',
+                                   'Wg500','Wg_AMCNLOFXFX','WZTo3LNu','Wg_MADGRAPHMLM',
+                                   #'Wg500','Wg_AMCNLOFXFX','WZTo3LNu','WgStarLNuEE','WgStarLNuMuMu','Wg_MADGRAPHMLM',
                                    'DYJetsToLL_M-10to50','DYJetsToLL_M-50','DYJetsToLL_M-10to50ext3', 
-                                   'WZTo2L2Q','WZTo3LNu_mllmin01'  
+                                   'WZTo2L2Q','WZTo3LNu_mllmin01_ext1'
                                  ]
                 },
 
@@ -1857,12 +1918,12 @@ Steps= {
                   'subTargets' : ['do_WgStarsel'],
                   'onlySample' : [
                                    # 2015
-                                   'Run2015C_16Dec2015_DoubleMuon' , 'Run2015C_16Dec2015_SingleElectron' , 'Run2015C_16Dec2015_SingleMuon',
-                                   'Run2015D_16Dec2015_DoubleMuon' , 'Run2015D_16Dec2015_SingleElectron' , 'Run2015D_16Dec2015_SingleMuon',
+                                   #'Run2015C_16Dec2015_DoubleMuon' , 'Run2015C_16Dec2015_SingleElectron' , 'Run2015C_16Dec2015_SingleMuon',
+                                   #'Run2015D_16Dec2015_DoubleMuon' , 'Run2015D_16Dec2015_SingleElectron' , 'Run2015D_16Dec2015_SingleMuon',
                                    # 2016 (ICHEP)
-                                   'Run2016B_PromptReco_DoubleMuon', 'Run2016B_PromptReco_SingleElectron', 'Run2016B_PromptReco_SingleMuon',
-                                   'Run2016C_PromptReco_DoubleMuon', 'Run2016C_PromptReco_SingleElectron', 'Run2016C_PromptReco_SingleMuon',
-                                   'Run2016D_PromptReco_DoubleMuon', 'Run2016D_PromptReco_SingleElectron', 'Run2016D_PromptReco_SingleMuon',
+                                   #'Run2016B_PromptReco_DoubleMuon', 'Run2016B_PromptReco_SingleElectron', 'Run2016B_PromptReco_SingleMuon',
+                                   #'Run2016C_PromptReco_DoubleMuon', 'Run2016C_PromptReco_SingleElectron', 'Run2016C_PromptReco_SingleMuon',
+                                   #'Run2016D_PromptReco_DoubleMuon', 'Run2016D_PromptReco_SingleElectron', 'Run2016D_PromptReco_SingleMuon',
                                    # 2016 (Full)
                                    'DoubleMuon_Run2016B-03Feb2017_ver2-v2' , 'SingleElectron_Run2016B-03Feb2017_ver2-v2' , 'SingleMuon_Run2016B-03Feb2017_ver2-v2' , 'DoubleEG_Run2016B-03Feb2017_ver2-v2', 'MuonEG_Run2016B-03Feb2017_ver2-v2',
                                    'DoubleMuon_Run2016C-03Feb2017-v1'      , 'SingleElectron_Run2016C-03Feb2017-v1'      , 'SingleMuon_Run2016C-03Feb2017-v1'      , 'DoubleEG_Run2016C-03Feb2017-v1', 'MuonEG_Run2016C-03Feb2017-v1',
@@ -1975,6 +2036,19 @@ Steps= {
                   'subTargets' : ['baseW','bPogSF','ggHUnc','genMatchVariables','BWEwkSinglet']
                     },
 
+  'LepTrgFix' : {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False ,
+                  'subTargets' : [ 'etaptlepsf' , 'TrigMakerMCkeepRun' ]
+                    },
+
+  'EleSysFix' : {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False ,
+                  'subTargets' : [ 'etaptlepsf' , 'formulasMC' ]
+                }, 
 
   'puextra'      :   {
                   'isChain'    : True ,
@@ -1988,128 +2062,6 @@ Steps= {
                   'do4MC'      : True ,
                   'do4Data'    : True ,
                   'subTargets' : ['do_lpTCorrMC','do_lpTCorrData','bPogSF','TrigEff','IdIsoSC','l2kin','l3kin','l4kin'],
-                  'XonlySample' : [
-                                  # DY 
-                                  'DYJetsToLL_M-10to50','DYJetsToLL_M-50','DYJetsToLL_M-10to50ext3', 'DYJetsToLL_M-50-LO' ,
-                                  'DY2JetsToLL', 'DY3JetsToLL', 'DY4JetsToLL',
-                                  'DYJetsToLL_M-50_HT-100to200_MLM' , 'DYJetsToLL_M-50_HT-100to200_MLM_ext' , 
-                                  'DYJetsToLL_M-50_HT-200to400_MLM' , 
-                                  'DYJetsToLL_M-50_HT-400to600_MLM' ,
-                                  'DYJetsToLL_M-50_HT-600toInf_MLM' ,
-                                  # WJets
-                                  'WJetsToLNu',
-                                  # Top
-                                  'TTTo2L2Nu','TTWJetsToLNu',
-                                  'ST_t-channel_antitop','ST_t-channel_top',
-                                  'ST_tW_antitop','ST_tW_top',
-                                  'TTToSemiLeptonic','TT',
-                                  # VV (including WW) 
-                                  'WWTo2L2Nu','GluGluWWTo2L2Nu_MCFM','GluGluWWTo2L2NuHiggs_MCFM',
-                                  'WZTo3LNu','WZ',
-                                  'ZZ','Zg',
-                                  'ZZTo2L2Nu','ZZTo2L2Q','ZZTo4L',
-                                  'Wg_AMCNLOFXFX', 
-                                  'Wg_MADGRAPHMLM',
-                                  'WZTo2L2Q',
-                                  # VVV
-                                  'WZZ','ZZZ','WWZ','WWW',
-                                  # Higgs 
-                                  'GluGluHToTauTau_M125', 'GluGluHToWWTo2L2Nu_M125','GluGluHToWWTo2L2NuPowheg_M125',
-                                  'GluGluHToWWTo2L2Nu_alternative_M125','VBFHToWWTo2L2Nu_alternative_M125',
-                                  'HWminusJ_HToTauTau_M125', 'HWminusJ_HToWW_M125',
-                                  'HWplusJ_HToTauTau_M125', 'HWplusJ_HToWW_M125',
-                                  'HZJ_HToTauTau_M125', 'HZJ_HToWW_M125',
-                                  'VBFHToTauTau_M125', 'VBFHToWWTo2L2Nu_M125',
-                                  'ggZH_HToWW_M125', # missing ggZHToTauTau
-                                  'ttHJetToNonbb_M125',
-                                  'GluGluHToZZTo4L_M125',
-                                  # 'GluGluZH_HToWWTo2L2Nu_M120_noHLT','GluGluZH_HToWWTo2L2Nu_M125_noHLT','GluGluZH_HToWWTo2L2Nu_M130_noHLT', ## old
-                                  # 'HZJ_HToWWTo2L2Nu_M120_noHLT','HZJ_HToWWTo2L2Nu_M125_noHLT','HZJ_HToWWTo2L2Nu_M130_noHLT',  ## old
-
-                                  'GluGluZH_HToWWTo2L2Nu_M120','GluGluZH_HToWWTo2L2Nu_M125','GluGluZH_HToWWTo2L2Nu_M130', # ggZH for monohiggs
-                                  'HZJ_HToWWTo2L2Nu_M120','HZJ_HToWWTo2L2Nu_M125','HZJ_HToWWTo2L2Nu_M130', # ZH for monohiggs
-                 
-
-                                  'HWplusJ_WToLNu_HToWWTo2L2Nu_M125','HWminusJ_WToLNu_HToWWTo2L2Nu_M125',
-                                  # ... ggH High Mass
-                                  'GluGluHToWWTo2L2Nu_M130',
-                                  'GluGluHToWWTo2L2Nu_M135',
-                                  'GluGluHToWWTo2L2Nu_M140',
-                                  'GluGluHToWWTo2L2Nu_M145',
-                                  'GluGluHToWWTo2L2Nu_M150',
-                                  'GluGluHToWWTo2L2Nu_M155',
-                                  'GluGluHToWWTo2L2Nu_M160',
-                                  'GluGluHToWWTo2L2Nu_M165',
-                                  'GluGluHToWWTo2L2Nu_M170',
-                                  'GluGluHToWWTo2L2Nu_M175',
-                                  'GluGluHToWWTo2L2Nu_M180',
-                                  'GluGluHToWWTo2L2Nu_M190',
-                                  'GluGluHToWWTo2L2Nu_M200',
-                                  'GluGluHToWWTo2L2Nu_M210',
-                                  'GluGluHToWWTo2L2Nu_M230',
-                                  'GluGluHToWWTo2L2Nu_M250',
-                                  'GluGluHToWWTo2L2Nu_M270',
-                                  'GluGluHToWWTo2L2Nu_M300',
-                                  'GluGluHToWWTo2L2Nu_M350',
-                                  'GluGluHToWWTo2L2Nu_M400',
-                                  'GluGluHToWWTo2L2Nu_M450',
-                                  'GluGluHToWWTo2L2Nu_M500',
-                                  'GluGluHToWWTo2L2Nu_M550',
-                                  'GluGluHToWWTo2L2Nu_M600',
-                                  'GluGluHToWWTo2L2Nu_M650',
-                                  'GluGluHToWWTo2L2Nu_M700',
-                                  'GluGluHToWWTo2L2Nu_M750',
-                                  'GluGluHToWWTo2L2Nu_M750_NWA',
-                                  'GluGluHToWWTo2L2Nu_M800',
-                                  'GluGluHToWWTo2L2Nu_M900',
-                                  'GluGluHToWWTo2L2Nu_M1000',
-                                  # ... VBF High Mass
-                                  'VBFHToWWTo2L2Nu_M130',
-                                  'VBFHToWWTo2L2Nu_M135',
-                                  'VBFHToWWTo2L2Nu_M140',
-                                  'VBFHToWWTo2L2Nu_M145',
-                                  'VBFHToWWTo2L2Nu_M150',
-                                  'VBFHToWWTo2L2Nu_M155',
-                                  'VBFHToWWTo2L2Nu_M160',
-                                  'VBFHToWWTo2L2Nu_M165',
-                                  'VBFHToWWTo2L2Nu_M170',
-                                  'VBFHToWWTo2L2Nu_M175',
-                                  'VBFHToWWTo2L2Nu_M180',
-                                  'VBFHToWWTo2L2Nu_M190',
-                                  'VBFHToWWTo2L2Nu_M200',
-                                  'VBFHToWWTo2L2Nu_M210',
-                                  'VBFHToWWTo2L2Nu_M230',
-                                  'VBFHToWWTo2L2Nu_M250',
-                                  'VBFHToWWTo2L2Nu_M270',
-                                  'VBFHToWWTo2L2Nu_M300',
-                                  'VBFHToWWTo2L2Nu_M350',
-                                  'VBFHToWWTo2L2Nu_M400',
-                                  'VBFHToWWTo2L2Nu_M450',
-                                  'VBFHToWWTo2L2Nu_M500',
-                                  'VBFHToWWTo2L2Nu_M550',
-                                  'VBFHToWWTo2L2Nu_M600',
-                                  'VBFHToWWTo2L2Nu_M650',
-                                  'VBFHToWWTo2L2Nu_M700',
-                                  'VBFHToWWTo2L2Nu_M750',
-                                  'VBFHToWWTo2L2Nu_M750_NWA',
-                                  'VBFHToWWTo2L2Nu_M800',
-                                  'VBFHToWWTo2L2Nu_M900',
-                                  'VBFHToWWTo2L2Nu_M1000',
-                                  # PS
-                                  'GluGluHToWWTo2L2NuHerwigPS_M125','VBFHToWWTo2L2NuHerwigPS_M125','WWTo2L2NuHerwigPS',
-                                  # UE
-                                  'GluGluHToWWTo2L2Nu_M125_CUETDown',
-                                  'GluGluHToWWTo2L2Nu_M125_CUETUp',
-                                  'VBFHToWWTo2L2Nu_M125_CUETDown',
-                                  'VBFHToWWTo2L2Nu_M125_CUETUp',
-                                  'WWTo2L2Nu_CUETDown',
-                                  'WWTo2L2Nu_CUETUp',
-                          # VBS
-                          'WpWpJJ_EWK','WpWpJJ_EWK_QCD','WpWpJJ_QCD','WW_DoubleScattering','WWTo2L2Nu_DoubleScattering','WLLJJToLNu_M-4to60_EWK_QCD','WLLJJToLNu_M-60_EWK_QCD',
-                          'WGJJ','EWKZ2Jets','TTToSemiLepton',
-                                  # VBF 
-                                  'WpWmJJ_EWK_QCD_noTop','WpWmJJ_QCD_noTop', 'WpWmJJ_EWK_noTop',
-                                 ] ,
                 },
 
 
@@ -2145,6 +2097,448 @@ Steps= {
                   'onlySample' : samples4Syst
                 }, 
 
+   
+  #AbsoluteScale
+  'FJESAbsoluteScaledo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESAbsoluteScaledo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },  
+
+  'FJESAbsoluteScaleup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESAbsoluteScaleup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+  #AbsoluteMPFBias
+  'FJESAbsoluteMPFBiasdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESAbsoluteMPFBiasdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESAbsoluteMPFBiasup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESAbsoluteMPFBiasup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst  
+  },
+
+  #AbsoluteStat
+  'FJESAbsoluteStatdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESAbsoluteStatdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESAbsoluteStatup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESAbsoluteStatup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #AbsoluteStat
+  'FJESFragmentationdo'     :  {  
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESFragmentationdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESFragmentationup'     :  {  
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESFragmentationup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #SinglePionECAL
+  'FJESSinglePionECALdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSinglePionECALdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESSinglePionECALup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSinglePionECALup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+   #SinglePionHCAL
+  'FJESSinglePionHCALdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSinglePionHCALdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESSinglePionHCALup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSinglePionHCALup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #FlavorQCD
+  'FJESFlavorQCDdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESFlavorQCDdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESFlavorQCDup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESFlavorQCDup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #TimePtEta
+  'FJESTimePtEtado'     :  { 
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESTimePtEtado','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESTimePtEtaup'     :  { 
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESTimePtEtaup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #RelativeJEREC1
+  'FJESRelativeJEREC1do'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativeJEREC1do','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESRelativeJEREC1up'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativeJEREC1up','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #RelativeJEREC2
+  'FJESRelativeJEREC2do'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativeJEREC2do','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESRelativeJEREC2up'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativeJEREC2up','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #RelativeJERHF
+  'FJESRelativeJERHFdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativeJERHFdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESRelativeJERHFup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativeJERHFup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+  
+  #RelativePtBB
+  'FJESRelativePtBBdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativePtBBdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESRelativePtBBup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativePtBBup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst  
+  },
+
+  #RelativePtEC1
+  'FJESRelativePtEC1do'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativePtEC1do','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESRelativePtEC1up'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativePtEC1up','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #RelativePtEC2
+  'FJESRelativePtEC2do'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativePtEC2do','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESRelativePtEC2up'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativePtEC2up','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #RelativePtHF
+  'FJESRelativePtHFdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativePtHFdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESRelativePtHFup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativePtHFup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+  
+  #RelativeBal
+  'FJESRelativeBaldo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativeBaldo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESRelativeBalup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativeBalup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #RelativeFSR
+  'FJESRelativeFSRdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativeFSRdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESRelativeFSRup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESRelativeFSRup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #PileUpDataMC
+  'FJESPileUpDataMCdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESPileUpDataMCdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESPileUpDataMCup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESPileUpDataMCup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+  
+  #PileUpPtRef
+  'FJESPileUpPtRefdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESPileUpPtRefdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESPileUpPtRefup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESPileUpPtRefup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  }, 
+
+  #PileUpPtBB
+  'FJESPileUpPtBBdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESPileUpPtBBdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESPileUpPtBBup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESPileUpPtBBup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #PileUpPtEC
+  'FJESPileUpPtECdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESPileUpPtECdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESPileUpPtECup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESPileUpPtECup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+
+  },
+
+  #PileUpPtHF
+  'FJESPileUpPtHFdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESPileUpPtHFdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESPileUpPtHFup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESPileUpPtHFup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #SubTotalPileUp
+  'FJESSubTotalPileUpdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSubTotalPileUpdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESSubTotalPileUpup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSubTotalPileUpup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #SubTotalRelative
+  'FJESSubTotalRelativedo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSubTotalRelativedo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESSubTotalRelativeup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSubTotalRelativeup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #SubTotalPt
+  'FJESSubTotalPtdo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSubTotalPtdo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESSubTotalPtup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSubTotalPtup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
+
+  #SubTotalScale
+  'FJESSubTotalScaledo'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSubTotalScaledo','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+                },
+
+  'FJESSubTotalScaleup'     :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'subTargets' : ['Fdo_JESSubTotalScaleup','FbPogSF','Fl2kin','Fl3kin','Fl4kin','Fdo_dymvaHiggs','FformulasMC'],
+                  'onlySample' : samples4Syst
+  },
 
   'JESMaxup'     :  {
                   'isChain'    : True ,
@@ -2353,7 +2747,8 @@ Steps= {
                   'isChain'    : False ,
                   'do4MC'      : True  ,
                   'do4Data'    : False ,
-                  'onlySample' : ['WWTo2L2Nu','WWTo2L2NuHerwigPS','WWTo2L2Nu_CUETUp','WWTo2L2Nu_CUETDown'] ,
+                  'onlySample' : ['WWTo2L2Nu','WWTo2L2NuHerwigPS','WWTo2L2Nu_CUETUp','WWTo2L2Nu_CUETDown',
+                                  'WWTo2L2Nu_aTGC_0-400','WWTo2L2Nu_aTGC_400-600','WWTo2L2Nu_aTGC_600-800','WWTo2L2Nu_aTGC_800-Inf'] ,
                   'command'    : 'gardener.py wwNLLcorrections -m \'powheg\' --cmssw RPLME_CMSSW'
                 },
 
@@ -2361,7 +2756,8 @@ Steps= {
                   'isChain'    : False ,
                   'do4MC'      : True  ,
                   'do4Data'    : False ,
-                  'onlySample' : ['WWTo2L2Nu','WWTo2L2NuHerwigPS','WWTo2L2Nu_CUETUp','WWTo2L2Nu_CUETDown'] ,
+                  'onlySample' : ['WWTo2L2Nu','WWTo2L2NuHerwigPS','WWTo2L2Nu_CUETUp','WWTo2L2Nu_CUETDown',
+                                  'WWTo2L2Nu_aTGC_0-400','WWTo2L2Nu_aTGC_400-600','WWTo2L2Nu_aTGC_600-800','WWTo2L2Nu_aTGC_800-Inf'] ,
                   'command'    : 'gardener.py wwEWKcorrections' ,
                 } ,
 
@@ -2381,6 +2777,33 @@ Steps= {
                   'command'    : 'gardener.py zzEWKcorrections' ,
                 } ,
 
+ 'dorochester'   : { 'isChain'    : True  ,
+                     'do4MC'      : True  ,
+                     'do4Data'    : True  ,
+                     'subTargets' : ['dorochesterMC','dorochesterData','TrigMakerMCkeepRun','IdIsoSC_Multi','l2kin','l3kin','l4kin','do_dymvaHiggs'],
+                   },
+
+'dorochesterMC'  : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py rochester --d 0 --cmssw RPLME_CMSSW' ,
+                } ,
+
+'dorochesterData'     : {
+                  'isChain'    : False ,
+                  'do4MC'      : False  ,
+                  'do4Data'    : True ,
+                  'command'    : 'gardener.py rochester --d 1 --cmssw RPLME_CMSSW' ,
+                } ,
+
+
+  'doDNN' :{
+                'isChain'    : False ,
+                'do4MC'      : True  ,
+                'do4Data'    : True ,
+                'command'    : 'gardener.py vbfdnnvarFiller  ' ,
+   }, 
 
   'genVariables'  : {
                   'isChain'    : False ,
@@ -2419,10 +2842,11 @@ Steps= {
                                   # WW
                                   'WWTo2L2Nu','WWTo2L2NuHerwigPS','WWTo2L2Nu_CUETUp','WWTo2L2Nu_CUETDown' ,
                                   'WWTo2L2Nu_DoubleScattering',
+                                  'WWTo2L2Nu_aTGC_0-400','WWTo2L2Nu_aTGC_400-600','WWTo2L2Nu_aTGC_600-800','WWTo2L2Nu_aTGC_800-Inf' ,
 
                                   
                  # Higgs 
-                 'GluGluHToTauTau_M125' , 'GluGluHToWWTo2L2Nu_M125','GluGluHToWWTo2L2NuPowheg_M125',
+                 'GluGluHToTauTau_M125' , 'GluGluHToWWTo2L2Nu_M125','GluGluHToWWTo2L2NuPowheg_M125','GluGluHToWWTo2L2Nu_minloHJJ_M125',
                  'GluGluHToWWTo2L2Nu_alternative_M125',
                  'VBFHToTauTau_M125' , 'VBFHToWWTo2L2Nu_M125','VBFHToWWTo2L2Nu_alternative_M125',
                  'HWminusJ_HToTauTau_M125', 'HWminusJ_HToWW_M125', 'HWminusJ_HToWW_LNu_M125' ,
@@ -2434,6 +2858,22 @@ Steps= {
                  'HZJ_HToWWTo2L2Nu_M120','HZJ_HToWWTo2L2Nu_M125','HZJ_HToWWTo2L2Nu_M130', # ZH for monohiggs
                  
                  'ggZH_HToWW_M125', # missing ggZHToTauTau
+
+                 # Spin samples
+                  'H0L1_ToWWTo2L2Nu',
+                  'H0L1f05_ToWWTo2L2Nu',
+                  'H0M_ToWWTo2L2Nu',
+                  'H0Mf05_ToWWTo2L2Nu',
+                  'H0PH_ToWWTo2L2Nu',
+                  'H0PHf05_ToWWTo2L2Nu',
+                  'H0PM_ToWWTo2L2Nu',
+                  'VBF_H0L1_ToWWTo2L2Nu',
+                  'VBF_H0L1f05_ToWWTo2L2Nu',
+                  'VBF_H0M_ToWWTo2L2Nu',
+                  'VBF_H0Mf05_ToWWTo2L2Nu',
+                  'VBF_H0PH_ToWWTo2L2Nu',
+                  'VBF_H0PHf05_ToWWTo2L2Nu',
+
 
                  # What ????
                  #'ttHJetToNonbb_M125','TTWJetsToLNu',
@@ -2512,7 +2952,7 @@ Steps= {
                  'VBFHToWWTo2L2Nu_JHUGen698_M2000' ,        
                  'VBFHToWWTo2L2Nu_JHUGen698_M2500' ,        
                  'VBFHToWWTo2L2Nu_JHUGen698_M3000' ,        
-                                  ]
+                                  ]  + VBS_HH_semilep_samples
 
                 },
 
@@ -2531,10 +2971,59 @@ Steps= {
                   'onlySample' : [
                                    'GluGluHToWWTo2L2Nu_M125',
                                    'GluGluHToWWTo2L2NuPowheg_M125', 
+                                   'GluGluHToWWTo2L2Nu_alternative_M125',
+                                   'GluGluHToWWTo2L2Nu_M125_minloHJ_NNLOPS',
+                                   'GluGluHToWWTo2L2Nu_minloHJJ_M125',
+                                   'GluGluHToTauTau_M125',
+                 # Spin samples
+                  'H0L1_ToWWTo2L2Nu',
+                  'H0L1f05_ToWWTo2L2Nu',
+                  'H0M_ToWWTo2L2Nu',
+                  'H0Mf05_ToWWTo2L2Nu',
+                  'H0PH_ToWWTo2L2Nu',
+                  'H0PHf05_ToWWTo2L2Nu',
+                  'H0PM_ToWWTo2L2Nu',
+                  'VBF_H0L1_ToWWTo2L2Nu',
+                  'VBF_H0L1f05_ToWWTo2L2Nu',
+                  'VBF_H0M_ToWWTo2L2Nu',
+                  'VBF_H0Mf05_ToWWTo2L2Nu',
+                  'VBF_H0PH_ToWWTo2L2Nu',
+                  'VBF_H0PHf05_ToWWTo2L2Nu',
+
                                  ],
                   'command'    : 'gardener.py ggHUncertainty' ,
                 } ,
 
+  'ggHtoMINLO' : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'onlySample' : [
+                                   'GluGluHToWWTo2L2Nu_M125',
+                                   'GluGluHToWWTo2L2NuPowheg_M125',
+                                   'GluGluHToWWTo2L2Nu_alternative_M125',
+                                   'GluGluHToWWTo2L2NuAMCNLO_M125',
+                                   'GluGluHToWWTo2L2Nu_M125_CUETDown',
+                                   'GluGluHToWWTo2L2Nu_M125_CUETUp',
+                                   'GluGluHToWWTo2L2Nu_M125_herwigpp',
+                 # Spin samples
+                  'H0L1_ToWWTo2L2Nu',
+                  'H0L1f05_ToWWTo2L2Nu',
+                  'H0M_ToWWTo2L2Nu',
+                  'H0Mf05_ToWWTo2L2Nu',
+                  'H0PH_ToWWTo2L2Nu',
+                  'H0PHf05_ToWWTo2L2Nu',
+                  'H0PM_ToWWTo2L2Nu',
+                  'VBF_H0L1_ToWWTo2L2Nu',
+                  'VBF_H0L1f05_ToWWTo2L2Nu',
+                  'VBF_H0M_ToWWTo2L2Nu',
+                  'VBF_H0Mf05_ToWWTo2L2Nu',
+                  'VBF_H0PH_ToWWTo2L2Nu',
+                  'VBF_H0PHf05_ToWWTo2L2Nu',
+
+                                 ],
+                  'command'    : 'gardener.py ggHtoMINLO' ,
+                } ,
 
 
   'TopGenPt' :   {
@@ -2559,48 +3048,48 @@ Steps= {
       
                   'onlySample' : [
                                   # ... ggH High Mass
-                                  'GluGluHToWWTo2L2Nu_M200',
-                                  'GluGluHToWWTo2L2Nu_M210',
-                                  'GluGluHToWWTo2L2Nu_M230',
-                                  'GluGluHToWWTo2L2Nu_M250',
-                                  'GluGluHToWWTo2L2Nu_M270',
-                                  'GluGluHToWWTo2L2Nu_M300',
-                                  'GluGluHToWWTo2L2Nu_M350',
-                                  'GluGluHToWWTo2L2Nu_M400',
-                                  'GluGluHToWWTo2L2Nu_M450',
-                                  'GluGluHToWWTo2L2Nu_M500',
-                                  'GluGluHToWWTo2L2Nu_M550',
-                                  'GluGluHToWWTo2L2Nu_M600',
-                                  'GluGluHToWWTo2L2Nu_M650',
-                                  'GluGluHToWWTo2L2Nu_M700',
-                                  'GluGluHToWWTo2L2Nu_M750',
-                                  #'GluGluHToWWTo2L2Nu_M750_NWA',
-                                  'GluGluHToWWTo2L2Nu_M800',
-                                  'GluGluHToWWTo2L2Nu_M900',
-                                  'GluGluHToWWTo2L2Nu_M1000',
-                                  # .... and new JHU samples
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M200',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M210',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M230',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M250',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M270',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M300',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M350',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M400',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M450',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M500',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M550',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M600',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M650',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M700',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M750',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M800',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M900',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M1000',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M1500',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M2000',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M2500',
-                                  'GluGluHToWWTo2L2Nu_JHUGen698_M3000',
+#                                  'GluGluHToWWTo2L2Nu_M200',
+#                                  'GluGluHToWWTo2L2Nu_M210',
+#                                  'GluGluHToWWTo2L2Nu_M230',
+#                                  'GluGluHToWWTo2L2Nu_M250',
+#                                  'GluGluHToWWTo2L2Nu_M270',
+#                                  'GluGluHToWWTo2L2Nu_M300',
+#                                  'GluGluHToWWTo2L2Nu_M350',
+#                                  'GluGluHToWWTo2L2Nu_M400',
+#                                  'GluGluHToWWTo2L2Nu_M450',
+#                                  'GluGluHToWWTo2L2Nu_M500',
+#                                  'GluGluHToWWTo2L2Nu_M550',
+#                                  'GluGluHToWWTo2L2Nu_M600',
+#                                  'GluGluHToWWTo2L2Nu_M650',
+#                                  'GluGluHToWWTo2L2Nu_M700',
+#                                  'GluGluHToWWTo2L2Nu_M750',
+#                                  #'GluGluHToWWTo2L2Nu_M750_NWA',
+#                                  'GluGluHToWWTo2L2Nu_M800',
+#                                  'GluGluHToWWTo2L2Nu_M900',
+#                                  'GluGluHToWWTo2L2Nu_M1000',
+#                                  # .... and new JHU samples
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M200',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M210',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M230',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M250',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M270',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M300',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M350',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M400',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M450',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M500',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M550',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M600',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M650',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M700',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M750',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M800',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M900',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M1000',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M1500',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M2000',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M2500',
+#                                  'GluGluHToWWTo2L2Nu_JHUGen698_M3000',
 
 
                                   # ... VBF High Mass
@@ -2649,9 +3138,16 @@ Steps= {
                                   'VBFHToWWTo2L2Nu_JHUGen698_M2500',
                                   'VBFHToWWTo2L2Nu_JHUGen698_M3000',
 
+                                  # ... ggH and VBF 4,5TeV
+                                  # NOTE: Samples use JHUGen714, but name is 698 here for consistent treatment within the module
+                                  'GluGluHToWWTo2L2Nu_JHUGen698_M4000',
+                                  'GluGluHToWWTo2L2Nu_JHUGen698_M5000',
+                                  'VBFHToWWTo2L2Nu_JHUGen698_M4000',
+                                  'VBFHToWWTo2L2Nu_JHUGen698_M5000',
+
                                  ],
                   #'command'    : 'gardener.py BWEwkSingletReweighter -p "latino_(GluGlu|VBF)HToWWTo2L2Nu_M([0-9]+)*"',
-                  'command'    : 'gardener.py BWEwkSingletReweighter ',
+                  'command'    : 'gardener.py BWEwkSingletReweighter -i 1.0 -f 1.0 -s 1.0 -l 0.0 -n 0.0 -q 1.0 ',
                  },
 
 
@@ -2939,13 +3435,30 @@ Steps= {
                   'command'    : 'gardener.py l1selfiller --kind 4 --cmssw RPLME_CMSSW --idEleKind cut_WP_Tight80X'
                },
 
+  'l1looseSimple'     : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : True  ,
+                  'command'    : 'gardener.py filter -f \'std_vector_lepton_pt[0] > 18.0 && std_vector_lepton_isLooseLepton[0]>0.5 \' '
+                },
+
+  'l1tight'     : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : True  ,
+                  'command'    : 'gardener.py filter -f \'std_vector_lepton_pt[0] > 18.0 && \
+                                                      (std_vector_muon_isTightLepton_cut_Tight80x[0]>0.5 || \
+                                                       std_vector_electron_isTightLepton_cut_WP_Tight80X[0]>0.5)\' '
+                },
+
 
   'do_WgStarsel' : {
                   'isChain'    : False ,
                   'do4MC'      : True  ,
                   'do4Data'    : True  ,
                   #OLD'command'    : 'gardener.py l2selfiller --kind 3 --cmssw RPLME_CMSSW'
-                  'command'    : 'gardener.py lepSel -k 3 -n 2 --cmssw RPLME_CMSSW '
+                  'command'    : 'gardener.py lepSel -k 3 -n 2 --cmssw RPLME_CMSSW ' # test config
+                  #'command'    : 'gardener.py lepSel -k 3 -n 2 --cmssw RPLME_CMSSW ' # original config
                },
 
 
@@ -2978,6 +3491,13 @@ Steps= {
                   'do4MC'      : True  ,
                   'do4Data'    : False  ,
                   'command'    : 'gardener.py multiidiso --cmssw=RPLME_CMSSW'
+               },
+
+  'etaptlepsf' : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False  ,
+                  'command'    : 'gardener.py etaptlepsf --cmssw=RPLME_CMSSW'
                },
  
 
@@ -3072,18 +3592,18 @@ Steps= {
                   'cpMap' : {
                               'UEdo' : { 
                                           'GluGluHToWWTo2L2Nu_M125_CUETDown' : ['GluGluHToWWTo2L2Nu_M125' ,'GluGluHToWWTo2L2NuPowheg_M125'],
-                                          'VBFHToWWTo2L2Nu_M125_CUETDown'    : ['VBFHToWWTo2L2Nu_M125']    ,
+                                          'VBFHToWWTo2L2Nu_M125_CUETDown'    : ['VBFHToWWTo2L2Nu_M125','VBFHToWWTo2L2Nu_alternative_M125']    ,
                                           'WWTo2L2Nu_CUETDown'               : ['WWTo2L2Nu'] , 
                                        },
                               'UEup' : {
                                           'GluGluHToWWTo2L2Nu_M125_CUETUp'   : ['GluGluHToWWTo2L2Nu_M125' ,'GluGluHToWWTo2L2NuPowheg_M125'],
-                                          'VBFHToWWTo2L2Nu_M125_CUETUp'      : ['VBFHToWWTo2L2Nu_M125']    ,
+                                          'VBFHToWWTo2L2Nu_M125_CUETUp'      : ['VBFHToWWTo2L2Nu_M125','VBFHToWWTo2L2Nu_alternative_M125']    ,
                                           'WWTo2L2Nu_CUETUp'                 : ['WWTo2L2Nu'] ,
                                        },
                               'PS'   : {    
                                           'GluGluHToWWTo2L2NuHerwigPS_M125'  : ['GluGluHToWWTo2L2Nu_M125' ,'GluGluHToWWTo2L2NuPowheg_M125'],
                                           'GluGluHToWWTo2L2Nu_M125_herwigpp' : ['GluGluHToWWTo2L2Nu_M125' ,'GluGluHToWWTo2L2NuPowheg_M125'], 
-                                          'VBFHToWWTo2L2NuHerwigPS_M125'     : ['VBFHToWWTo2L2Nu_M125'] ,
+                                          'VBFHToWWTo2L2NuHerwigPS_M125'     : ['VBFHToWWTo2L2Nu_M125','VBFHToWWTo2L2Nu_alternative_M125'] ,
                                           'WWTo2L2NuHerwigPS'                : ['WWTo2L2Nu'] ,
                                        },
                             },
@@ -3132,7 +3652,398 @@ Steps= {
                   'command'    : 'gardener.py JESTreeMaker -k -1 --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
                 } ,
 
-  
+    #AbsoluteScale
+    'Fdo_JESAbsoluteScaledo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source AbsoluteScale --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESAbsoluteScaleup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source AbsoluteScale --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #AbsoluteStat
+    'Fdo_JESAbsoluteStatdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source AbsoluteStat --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESAbsoluteStatup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source AbsoluteStat --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #AbsoluteMPFBias
+    'Fdo_JESAbsoluteMPFBiasdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source AbsoluteMPFBias --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESAbsoluteMPFBiasup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source AbsoluteMPFBias --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,           
+
+    #Fragmentation
+    'Fdo_JESFragmentationdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source Fragmentation --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESFragmentationup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source Fragmentation --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } , 
+
+    #SinglePionECAL
+    'Fdo_JESSinglePionECALdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source SinglePionECAL --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESSinglePionECALup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source SinglePionECAL --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } , 
+
+    #SinglePionHCAL
+    'Fdo_JESSinglePionHCALdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source SinglePionHCAL --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESSinglePionHCALup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source SinglePionHCAL --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #Flavor
+    'Fdo_JESFlavordo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source Flavor --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESFlavorup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source Flavor --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #TimePtEta
+    'Fdo_JESTimePtEtado'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source TimePtEta --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESTimePtEtaup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source TimePtEta --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+    
+    #RelativeJEREC1
+    'Fdo_JESRelativeJEREC1do'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source RelativeJEREC1 --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESRelativeJEREC1up'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source RelativeJEREC1 --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+
+    #RelativeJEREC2
+    'Fdo_JESRelativeJEREC2do'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source RelativeJEREC2 --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESRelativeJEREC2up'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source RelativeJEREC2 --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #RelativeJERHF
+    'Fdo_JESRelativeJERHFdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source RelativeJERHF --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESRelativeJERHFup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source RelativeJERHF --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #RelativePtBB
+    'Fdo_JESRelativePtBBdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source RelativePtBB --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESRelativePtBBup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source RelativePtBB --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #RelativePtEC1
+    'Fdo_JESRelativePtEC1do'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source RelativePtEC1 --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESRelativePtEC1up'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source RelativePtEC1 --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #RelativePtEC2
+    'Fdo_JESRelativePtEC2do'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source RelativePtEC2 --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESRelativePtEC2up'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source RelativePtEC2 --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #RelativePtHF
+    'Fdo_JESRelativePtHFdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source RelativePtHF --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESRelativePtHFup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source RelativePtHF --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #RelativeBal
+    'Fdo_JESRelativeBaldo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source RelativeBal --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESRelativeBalup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source RelativeBal --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #RelativeFSR
+    'Fdo_JESRelativeFSRdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source RelativeFSR --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESRelativeFSRup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source RelativeFSR --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #PileUpDataMC
+    'Fdo_JESPileUpDataMCdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source PileUpDataMC --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESPileUpDataMCup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source PileUpDataMC --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #PileUpPtRef
+    'Fdo_JESPileUpPtRefdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source PileUpPtRef --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESPileUpPtRefup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source PileUpPtRef --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+
+    #PileUpPtBB
+    'Fdo_JESPileUpPtBBdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source PileUpPtBB --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESPileUpPtBBup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source PileUpPtBB --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+ 
+    #PileUpPtEC
+    'Fdo_JESPileUpPtECdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source PileUpPtEC --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESPileUpPtECup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source PileUpPtEC --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #PileUpPtHF
+    'Fdo_JESPileUpPtHFdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source PileUpPtHF --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESPileUpPtHFup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source PileUpPtHF --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #SubTotalPileUp
+    'Fdo_JESSubTotalPileUpdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source SubTotalPileUp --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESSubTotalPileUpup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source SubTotalPileUp --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #SubTotalRelative
+    'Fdo_JESSubTotalRelativedo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source SubTotalRelative --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESSubTotalRelativeup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source SubTotalRelative --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #SubTotalPt
+    'Fdo_JESSubTotalPtdo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source SubTotalPt --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESSubTotalPtup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source SubTotalPt --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    #SubTotalScale
+    'Fdo_JESSubTotalScaledo'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k -1 --source SubTotalScale --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+
+    'Fdo_JESSubTotalScaleup'    : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False ,
+                  'command'    : 'gardener.py JESTreeMaker -k  1 --source SubTotalScale --cmssw=RPLME_CMSSW --saveOnlyModifiedBranches'
+                } ,
+ 
   'do_JESMaxup'    : {
                   'isChain'    : False ,
                   'do4MC'      : True  ,
@@ -3284,6 +4195,22 @@ Steps= {
                    'command'    : 'gardener.py muccaMvaVarFiller --kind 5'
                  } ,
 
+  # MUCCA for monoH high mass training
+
+  # Chain for em channel
+  
+  'muccaMonoHem_Apr2017'       :  {
+        'isChain'    : True ,
+        'do4MC'      : True ,
+        'do4Data'    : True ,
+        'subTargets' : [
+            'mucca_2HDMadaptFull_high_em',
+            'mucca_ZbaradaptFull_high_em',
+            # 'mucca_2HDMgradFull_high_em',
+            # 'mucca_ZbargradFull_high_em'
+            ],
+        },
+  
   # MUCCA for monoH from larger training phase space
 
   # Chain for em channel
@@ -3482,7 +4409,6 @@ Steps= {
             ],
         },
   
-  
   # 2HDM model em
   
   'mucca_2HDMadapt_em'      : {
@@ -3604,6 +4530,193 @@ Steps= {
         } ,
 
 
+  # Chain for em channel trained on Apr2017 trees
+  # 2HDMmasses = {'600','800','1000','1200','1400','1700','2000','2500'}
+  # Zbarmasses = {'10','20','50','100','200','300','500','1000','2000','10000'}
+
+  'muccaMonoH_Apr2017_em'       :  {
+        'isChain'    : True ,
+        'do4MC'      : True ,
+        'do4Data'    : True ,
+        'subTargets' : [
+            # 2HDM
+            '2HDM600em',
+            '2HDM800em',
+            '2HDM1000em',
+            '2HDM1200em',
+            '2HDM1400em',
+            '2HDM1700em',
+            '2HDM2000em',
+            '2HDM2500em',
+            # Zbar
+            'Zbar10em',
+            #'Zbar20em',
+            'Zbar50em',
+            'Zbar100em',
+            'Zbar200em',
+            #'Zbar300em',
+            'Zbar500em',
+            'Zbar1000em',
+            'Zbar2000em',
+            'Zbar10000em'
+            ],
+        },
+  
+  'muccaAll_em'       :  {
+        'isChain'    : True ,
+        'do4MC'      : True ,
+        'do4Data'    : True ,
+        'subTargets' : [
+            '2HDMAllem',
+            'ZbarAllem'
+            ],
+        },
+  
+
+  # 2HDM model trained on Apr2017 trees
+  
+  '2HDMAllem'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="2HDMadaptFull_All_em" --training="BDT7" --channel="em" --model="2HDM" --mass="0_0"'
+        } ,
+
+  '2HDM600em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="2HDMadaptFull_600_300_em" --training="BDT7" --channel="em" --model="2HDM" --mass="600_300"'
+        } ,
+
+  '2HDM800em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="2HDMadaptFull_800_300_em" --training="BDT7" --channel="em" --model="2HDM" --mass="800_300"'
+        } ,
+
+    '2HDM1000em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="2HDMadaptFull_1000_300_em" --training="BDT7" --channel="em" --model="2HDM" --mass="1000_300"'
+        } ,
+
+  '2HDM1200em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="2HDMadaptFull_1200_300_em" --training="BDT7" --channel="em" --model="2HDM" --mass="1200_300"'
+        } ,
+
+  '2HDM1400em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="2HDMadaptFull_1400_300_em" --training="BDT7" --channel="em" --model="2HDM" --mass="1400_300"'
+        } ,
+
+  '2HDM1700em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="2HDMadaptFull_1700_300_em" --training="BDT7" --channel="em" --model="2HDM" --mass="1700_300"'
+        } ,
+
+  '2HDM2000em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="2HDMadaptFull_2000_300_em" --training="BDT7" --channel="em" --model="2HDM" --mass="2000_300"'
+        } ,
+
+  '2HDM2500em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="2HDMadaptFull_2500_300_em" --training="BDT7" --channel="em" --model="2HDM" --mass="2500_300"'
+        } ,
+
+  # Zbar model trained on Apr2017 trees
+
+  'ZbarAllem'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_All_em" --training="BDT7" --channel="em" --model="Zbar" --mass="0_0"'
+        } ,
+
+  'Zbar10em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_10_1_em" --training="BDT7" --channel="em" --model="Zbar"  --mass="10_1"'
+        } ,
+  
+  'Zbar20em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_20_1_em" --training="BDT7" --channel="em" --model="Zbar"  --mass="20_1"'
+        } ,
+  
+  'Zbar50em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_50_1_em" --training="BDT7" --channel="em" --model="Zbar"  --mass="50_1"'
+        } ,
+  
+  'Zbar100em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_100_1_em" --training="BDT7" --channel="em" --model="Zbar"  --mass="100_1"'
+        } ,
+  
+  'Zbar200em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_200_1_em" --training="BDT7" --channel="em" --model="Zbar"  --mass="200_1"'
+        } ,
+  
+  'Zbar300em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_300_1_em" --training="BDT7" --channel="em" --model="Zbar"  --mass="300_1"'
+        } ,
+  
+  'Zbar500em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_500_1_em" --training="BDT7" --channel="em" --model="Zbar"  --mass="500_1"'
+        } ,
+  
+  'Zbar1000em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_1000_1_em" --training="BDT7" --channel="em" --model="Zbar"  --mass="1000_1"'
+        } ,
+  
+  'Zbar2000em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_2000_1_em" --training="BDT7" --channel="em" --model="Zbar"  --mass="2000_1"'
+        } ,
+  
+  'Zbar10000em'    : {
+        'isChain'    : False ,
+        'do4MC'      : True  ,
+        'do4Data'    : True ,
+        'command'    : 'gardener.py muccaMonoHFullVarHighFiller --signal="ZbaradaptFull_10000_1_em" --training="BDT7" --channel="em" --model="Zbar"  --mass="10000_1"'
+        } ,
+  
 
    # fix datasets names
   'fixdataset_Herwig_nuisance':  {
@@ -3648,7 +4761,8 @@ Steps= {
                                   'QCD_Pt_170to250_bcToE','QCD_Pt_250toInf_bcToE',
                                   ####
                                   'TT','TTJets',
-
+                                  ### 
+                                  'Wg_MADGRAPHMLM' , 'GluGluHToWWTo2L2NuPowheg_M125' , 'WZTo3LNu_mllmin01' ,
                                  ] ,
            },
 
@@ -3767,6 +4881,96 @@ Steps= {
                   'subTargets' : ['do_vbsSel','chFlipProba2j'], 
            },
 
+ 'vbsLooseSel'    : {
+                  'isChain'    : False  ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : True  ,
+                  'command'    : 'gardener.py filter -f \' std_vector_lepton_pt[0]>20 && std_vector_lepton_pt[1]>10 && njet>=2 && mjj>250 \' ' ,
+                  'onlySample' : [
+                                        #  
+                                        'DoubleEG_Run2016B-03Feb2017_ver2-v2',
+                                        'DoubleMuon_Run2016B-03Feb2017_ver2-v2',
+                                        'MuonEG_Run2016B-03Feb2017_ver2-v2',
+                                        'SingleElectron_Run2016B-03Feb2017_ver2-v2',
+                                        'SingleMuon_Run2016B-03Feb2017_ver2-v2',
+                                        #  
+                                        'DoubleEG_Run2016C-03Feb2017-v1',
+                                        'DoubleMuon_Run2016C-03Feb2017-v1',
+                                        'MuonEG_Run2016C-03Feb2017-v1',
+                                        'SingleElectron_Run2016C-03Feb2017-v1',
+                                        'SingleMuon_Run2016C-03Feb2017-v1',
+                                        #  
+                                        'DoubleEG_Run2016D-03Feb2017-v1',
+                                        'DoubleMuon_Run2016D-03Feb2017-v1',
+                                        'MuonEG_Run2016D-03Feb2017-v1',
+                                        'SingleElectron_Run2016D-03Feb2017-v1',
+                                        'SingleMuon_Run2016D-03Feb2017-v1',
+                                        #  
+                                        'DoubleEG_Run2016E-03Feb2017-v1',
+                                        'DoubleMuon_Run2016E-03Feb2017-v1',
+                                        'MuonEG_Run2016E-03Feb2017-v1',
+                                        'SingleElectron_Run2016E-03Feb2017-v1',
+                                        'SingleMuon_Run2016E-03Feb2017-v1',
+                                        # 
+                                        'DoubleEG_Run2016F-03Feb2017-v1',
+                                        'DoubleMuon_Run2016F-03Feb2017-v1',
+                                        'MuonEG_Run2016F-03Feb2017-v1',
+                                        'SingleElectron_Run2016F-03Feb2017-v1',
+                                        'SingleMuon_Run2016F-03Feb2017-v1', 
+                                        #  
+                                        'DoubleEG_Run2016G-03Feb2017-v1',
+                                        'DoubleMuon_Run2016G-03Feb2017-v1',
+                                        'MuonEG_Run2016G-03Feb2017-v1',
+                                        'SingleElectron_Run2016G-03Feb2017-v1',
+                                        'SingleMuon_Run2016G-03Feb2017-v1',
+                                        #  
+                                        'DoubleEG_Run2016H-03Feb2017_ver2-v1',
+                                        'DoubleMuon_Run2016H-03Feb2017_ver2-v1',
+                                        'MuonEG_Run2016H-03Feb2017_ver2-v1',
+                                        'SingleElectron_Run2016H-03Feb2017_ver2-v1',
+                                        'SingleMuon_Run2016H-03Feb2017_ver2-v1',
+                                        'DoubleEG_Run2016H-03Feb2017_ver3-v1',
+                                        'DoubleMuon_Run2016H-03Feb2017_ver3-v1',
+                                        'MuonEG_Run2016H-03Feb2017_ver3-v1',
+                                        'SingleElectron_Run2016H-03Feb2017_ver3-v1',
+                                        'SingleMuon_Run2016H-03Feb2017_ver3-v1',
+                                    #  Charge Flip backgrounds
+                                    'DYJetsToLL_M-10to50'   ,
+                                    'DYJetsToLL_M-50'   ,
+                                    'TTTo2L2Nu'        ,
+                                    'ST_tW_top_noHad' ,
+                                    'ST_tW_antitop_noHad' ,
+                                    'GluGluWWTo2L2Nu_MCFM',
+                                    'WWTo2L2Nu'       ,
+                                    # Other MC
+           'Zg',
+           'WGJJ',
+           'ZZTo4L',
+           'WpWpJJ_QCD',
+           'ZZZ',
+           'WZZ',
+           'WWZ',
+           'TTWJetsToLNu',
+           'TTZToLLNuNu_M-10',
+           'WWTo2L2Nu_DoubleScattering',
+           'WLLJJToLNu_M-4To60_EWK_4F'       ,
+           'WLLJJToLNu_M-60_EWK_4F'          ,
+           'WLLJJToLNu_M-4To50_QCD_0Jet'     ,
+           'WLLJJToLNu_M-4To50_QCD_1Jet'     ,
+           'WLLJJToLNu_M-4To50_QCD_2Jet'     ,
+           'WLLJJToLNu_M-4To50_QCD_3Jet'    ,
+           'WLLJJToLNu_M-50_QCD_0Jet'       ,
+           'WLLJJToLNu_M-50_QCD_1Jet'       ,
+           'WLLJJToLNu_M-50_QCD_2Jet'      ,
+           'WLLJJToLNu_M-50_QCD_3Jet'     ,
+           'tZq_ll'                      ,
+           'WpWpJJ_EWK',
+
+
+                                 ],
+           },
+
+
   'tightVbsSel'    : {
                   'isChain'    : True  ,
                   'do4MC'      : True  ,
@@ -3827,6 +5031,22 @@ Steps= {
                   'onlySample' : ['DYJetsToLL_M-10to50','DYJetsToLL_M-50','TTTo2L2Nu_ext1','DYJetsToLL_M-50-LO-ext1','TTTo2L2Nu'],
                   },
 
+  'chargeFlipWeightVBS' : {
+                  'isChain'    : False ,
+                  'do4MC'      : True  ,
+                  'do4Data'    : False  ,
+                  'command'    : 'gardener.py chargeFlipWeightVBS',
+                  'onlySample' : [
+                                    'DYJetsToLL_M-10to50'   ,
+                                    'DYJetsToLL_M-50'   ,
+                                    'TTTo2L2Nu'        ,
+                                    'ST_tW_top_noHad' ,
+                                    'ST_tW_antitop_noHad' ,
+                                    'GluGluWWTo2L2Nu_MCFM',
+                                    'WWTo2L2Nu'       ,
+],
+                  },
+ 
 
   'sfSel'    : {  'isChain'    : False ,
                   'do4MC'      : True  ,
@@ -3851,7 +5071,6 @@ Steps= {
                                                            && std_vector_lepton_pt[0] > 20    \
                                                            && std_vector_lepton_pt[1] > 10    \
                                                            && std_vector_lepton_pt[2] < 10      \
-                                                           && (abs(std_vector_lepton_flavour[1]) == 13 || (std_vector_lepton_pt[0]>25 && std_vector_lepton_pt[1]>13) )    \
                                                            && (    ( std_vector_jet_pt[1]<=30 && dymvaggh > 0.6 )   \
                                                                 || ( std_vector_jet_pt[1]> 30 && ( dymvaggh > 0.6 || dymvavbf > 0.6 ) ) )   \
                                                          \' ',
@@ -3998,4 +5217,174 @@ Steps= {
                                         'SingleMuon_Run2016H-03Feb2017_ver3-v1',
                                        ],
                     },
+
+  'PrefCorr' : {
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+      
+                  'command'    : 'gardener.py prefcorrMiniAOD',
+                 },
+
+  'l1tightChain' :  {
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'subTargets' : ["l1looseSimple", 'l1tight']
+   },
+
+  'resolvedVBSPairingAndVars' :{
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'subTargets' : ['gr4JetsSkim', 'JetPairingVBS', 'VBSjjlnu_kin']
+  },
+
+  'resolvedVBSPairingGenAndVars' :{
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'subTargets' : ['gr4JetsSkim', 'JetPairingGenVBS','JetPairingVBS', 'VBSjjlnu_kin']
+  },
+
+  'JetPairingGenVBS' :{
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'command'    : 'gardener.py JetPairingGenVBS --radius 0.8 --ptminjet 20.0'
+  },
+
+
+
+  'JetPairingVBS' :{
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'command'    : 'gardener.py JetPairingVBS --ptminjet 20.0'
+  },
+
+  'HHPairingGenAndVars' :{
+                  'isChain'    : True ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'subTargets' : ['gr4JetsSkim', 'JetPairingGenHH','JetPairingHH']
+  },
+
+
+  'JetPairingGenHH' :{
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : False,
+                  'command'    : 'gardener.py JetPairingGenHH --radius 0.8 --ptminjet 20.0 --bWP M -m 0'
+  },
+
+
+  'JetPairingHH' :{
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'command'    : 'gardener.py JetPairingHH --ptminjet 20.0 --bWP M -m 0'
+  },
+
+   'VBSjjlnu_kin' :{
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'command'    : 'gardener.py VBSjjlnu_kin --ptminjet 20.0'
+  },
+
+  'gr4JetsSkim' :{
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'command'    : 'gardener.py filter -f \'std_vector_jet_pt[3]>=20 \' '
+  },
+
+# WP taken from https://github.com/latinos/LatinoAnalysis/blob/master/Gardener/python/variables/allBtagPogScaleFactors.py#L358
+  'btagTight' : {
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'command'    : 'gardener.py filter -f \' (1*(std_vector_jet_DeepCSVB[0] > 0.8958)*(std_vector_jet_pt[0]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[1] > 0.8958)*(std_vector_jet_pt[1]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[2] > 0.8958)*(std_vector_jet_pt[2]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[3] > 0.8958)*(std_vector_jet_pt[3]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[4] > 0.8958)*(std_vector_jet_pt[4]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[5] > 0.8958)*(std_vector_jet_pt[5]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[6] > 0.8958)*(std_vector_jet_pt[6]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[7] > 0.8958)*(std_vector_jet_pt[7]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[8] > 0.8958)*(std_vector_jet_pt[8]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[9] > 0.8958)*(std_vector_jet_pt[9]>25) \
+                                                            ) >= 1 \' '
+                  },
+
+  'btagMedium' : {
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'command'    : 'gardener.py filter -f \' (1*(std_vector_jet_DeepCSVB[0] > 0.6324)*(std_vector_jet_pt[0]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[1] > 0.6324)*(std_vector_jet_pt[1]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[2] > 0.6324)*(std_vector_jet_pt[2]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[3] > 0.6324)*(std_vector_jet_pt[3]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[4] > 0.6324)*(std_vector_jet_pt[4]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[5] > 0.6324)*(std_vector_jet_pt[5]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[6] > 0.6324)*(std_vector_jet_pt[6]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[7] > 0.6324)*(std_vector_jet_pt[7]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[8] > 0.6324)*(std_vector_jet_pt[8]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[9] > 0.6324)*(std_vector_jet_pt[9]>25) \
+                                                            ) >= 1 \' '
+                  },
+  
+  'btagLoose' : {
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'command'    : 'gardener.py filter -f \' (1*(std_vector_jet_DeepCSVB[0] > 0.2219)*(std_vector_jet_pt[0]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[1] > 0.2219)*(std_vector_jet_pt[1]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[2] > 0.2219)*(std_vector_jet_pt[2]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[3] > 0.2219)*(std_vector_jet_pt[3]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[4] > 0.2219)*(std_vector_jet_pt[4]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[5] > 0.2219)*(std_vector_jet_pt[5]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[6] > 0.2219)*(std_vector_jet_pt[6]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[7] > 0.2219)*(std_vector_jet_pt[7]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[8] > 0.2219)*(std_vector_jet_pt[8]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[9] > 0.2219)*(std_vector_jet_pt[9]>25) \
+                                                            ) >= 1 \' '
+                  },
+
+  'bvetoTight' : {
+                  'isChain'    : False ,
+                  'do4MC'      : True ,
+                  'do4Data'    : True,
+                  'command'    : 'gardener.py filter -f \' (1*(std_vector_jet_DeepCSVB[0] > 0.2219)*(std_vector_jet_pt[0]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[1] > 0.2219)*(std_vector_jet_pt[1]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[2] > 0.2219)*(std_vector_jet_pt[2]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[3] > 0.2219)*(std_vector_jet_pt[3]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[4] > 0.2219)*(std_vector_jet_pt[4]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[5] > 0.2219)*(std_vector_jet_pt[5]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[6] > 0.2219)*(std_vector_jet_pt[6]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[7] > 0.2219)*(std_vector_jet_pt[7]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[8] > 0.2219)*(std_vector_jet_pt[8]>25) + \
+                                                            1*(std_vector_jet_DeepCSVB[9] > 0.2219)*(std_vector_jet_pt[9]>25) \
+                                                            ) == 0 \' '
+                },
+
+  'bvetoLoose' : {
+                    'isChain'    : False ,
+                    'do4MC'      : True ,
+                    'do4Data'    : True,
+                    'command'    : 'gardener.py filter -f \' (1*(std_vector_jet_DeepCSVB[0] > 0.8958)*(std_vector_jet_pt[0]>25) + \
+                                                              1*(std_vector_jet_DeepCSVB[1] > 0.8958)*(std_vector_jet_pt[1]>25) + \
+                                                              1*(std_vector_jet_DeepCSVB[2] > 0.8958)*(std_vector_jet_pt[2]>25) + \
+                                                              1*(std_vector_jet_DeepCSVB[3] > 0.8958)*(std_vector_jet_pt[3]>25) + \
+                                                              1*(std_vector_jet_DeepCSVB[4] > 0.8958)*(std_vector_jet_pt[4]>25) + \
+                                                              1*(std_vector_jet_DeepCSVB[5] > 0.8958)*(std_vector_jet_pt[5]>25) + \
+                                                              1*(std_vector_jet_DeepCSVB[6] > 0.8958)*(std_vector_jet_pt[6]>25) + \
+                                                              1*(std_vector_jet_DeepCSVB[7] > 0.8958)*(std_vector_jet_pt[7]>25) + \
+                                                              1*(std_vector_jet_DeepCSVB[8] > 0.8958)*(std_vector_jet_pt[8]>25) + \
+                                                              1*(std_vector_jet_DeepCSVB[9] > 0.8958)*(std_vector_jet_pt[9]>25) \
+                                                              ) == 0 \' '
+                  },
+
+
 }

@@ -13,12 +13,12 @@ if __name__ == '__main__':
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
     
-    parser.add_option('--dycfg'           , dest='dycfg'           , help='DY estimation dictionary'                  , default='dyestim.py') 
+    parser.add_option('--dycfg'          , dest='dycfg'          , help='DY estimation dictionary'                   , default='dyestim.py') 
     parser.add_option('--outputDir'      , dest='outputDir'      , help='output directory'                           , default='./')
     parser.add_option('--tag'            , dest='tag'            , help='Tag used for the shape file name'           , default=None)
     parser.add_option('--DYtag'          , dest='DYtag'          , help='Tag added to the shape file name'           , default='DYEstim')
     parser.add_option('--inputFile'      , dest='inputFile'      , help='input file with histograms'                 , default='DEFAULT')
-    parser.add_option('--outputFile'     , dest='outputFile'     , help='output file with histograms'                 , default='DEFAULT')
+    parser.add_option('--outputFile'     , dest='outputFile'     , help='output file with histograms'                , default='DEFAULT')
  
     # read default parsing options as well
     hwwtools.addOptions(parser)
@@ -43,6 +43,12 @@ if __name__ == '__main__':
     variables = {}
     if os.path.exists(opt.variablesFile) :
       handle = open(opt.variablesFile,'r')
+      exec(handle)
+      handle.close()
+
+    samples = {}
+    if os.path.exists(opt.samplesFile) :
+      handle = open(opt.samplesFile,'r')
       exec(handle)
       handle.close()
 
@@ -79,7 +85,10 @@ if __name__ == '__main__':
       Rinout[iRAndKff] = {}
       K_ff[iRAndKff] = {}
 
+      print iRAndKff
+
       for iRegion in RAndKff[iRAndKff]['Regions']: 
+        print iRegion
 #       print iRegion ,' k = ' , DYCalc.k_MC(RAndKff[iRAndKff]['KffFile'],RAndKff[iRAndKff]['Regions'][iRegion]['kNum'],RAndKff[iRAndKff]['Regions'][iRegion]['kDen']),' +/- ', DYCalc.Ek_MC(RAndKff[iRAndKff]['KffFile'],RAndKff[iRAndKff]['Regions'][iRegion]['kNum'],RAndKff[iRAndKff]['Regions'][iRegion]['kDen'])
 #       print iRegion ,' R = ' , DYCalc.R_outin_MC(RAndKff[iRAndKff]['RFile'],RAndKff[iRAndKff]['Regions'][iRegion]['RNum'],RAndKff[iRAndKff]['Regions'][iRegion]['RDen']),' +/- ', DYCalc.ER_outin_MC(RAndKff[iRAndKff]['RFile'],RAndKff[iRAndKff]['Regions'][iRegion]['RNum'],RAndKff[iRAndKff]['Regions'][iRegion]['RDen'])
         K_ff[iRAndKff][iRegion] = {}
@@ -103,6 +112,7 @@ if __name__ == '__main__':
     for key in inputFile.GetListOfKeys() : 
       if key.IsFolder() : 
         baseDir = key.GetName()
+        #print '---> folder: ',baseDir
         outputFile.mkdir(baseDir) 
         inputFile.cd(baseDir)
         for skey in ROOT.gDirectory.GetListOfKeys() :
@@ -114,8 +124,10 @@ if __name__ == '__main__':
               hName = hkey.GetName() 
               outputFile.cd(baseDir+'/'+subDir)
               hTmp = inputFile.Get(baseDir+'/'+subDir+'/'+hName).Clone()
+              iDYestimKeep = 'NONE'
               for iDYestim in DYestim :
                 if baseDir == iDYestim : 
+                  iDYestimKeep = iDYestim
                   sName=''
                   for i in range( 1, len(DYestim[iDYestim]['DYProc'].split('_'))+1 ) : 
                     if len(hName.split('_')) >= len(DYestim[iDYestim]['DYProc'].split('_'))+1 : 
@@ -124,71 +136,87 @@ if __name__ == '__main__':
                   if sName == DYestim[iDYestim]['DYProc'] :
                    if not hName == 'histo_'+DYestim[iDYestim]['DYProc']+'_'+DYestim[iDYestim]['NPname']+'Up' and not hName == 'histo_'+DYestim[iDYestim]['DYProc']+'_'+DYestim[iDYestim]['NPname']+'Down' :
                     if hTmp.Integral() == 0 : 
+                       nHisDummy = 0
                        print '!!!!!!!!!!!!!!!!!!!!! WARNING: Empty histogram -> Setting dummy input !!!!!!!!!!!!!!!!!!!!!!',hName
                        print '!!!!!!!!!!!!!!!!!!!!! Only works for 1 bin, see below !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
                        print '!!!!!!!!!!!!!!!!!!!!! nBin = ',hTmp.GetNbinsX()
                        for iBin in range(1,hTmp.GetNbinsX()+1) : 
+                          nHisDummy += 1.
                           hTmp.SetBinContent(iBin,1.)
                           hTmp.SetBinError(iBin,1.)
                     if hName == 'histo_'+DYestim[iDYestim]['DYProc']:
                       hUp = hTmp.Clone('histo_'+DYestim[iDYestim]['DYProc']+'_'+DYestim[iDYestim]['NPname']+'Up')
                       hDo = hTmp.Clone('histo_'+DYestim[iDYestim]['DYProc']+'_'+DYestim[iDYestim]['NPname']+'Down')
                     print '--------- DY' , baseDir , hName , len(DYestim[iDYestim]['DYProc'].split('_'))
-                    Nin = inputFile.Get(DYestim[iDYestim]['SFin']+'/events/histo_'+DYestim[iDYestim]['SFinDa']).Integral()
-                    ENin = inputFile.Get(DYestim[iDYestim]['SFin']+'/events/histo_'+DYestim[iDYestim]['SFinDa']).GetBinError(1)
-                    Ndf = inputFile.Get(DYestim[iDYestim]['DFin']+'/events/histo_'+DYestim[iDYestim]['DFinDa']).Integral()
-                    ENdf = inputFile.Get(DYestim[iDYestim]['DFin']+'/events/histo_'+DYestim[iDYestim]['DFinDa']).GetBinError(1)
-                    Nvv = 0
-                    ENvv = 0
-                    for iMC in DYestim[iDYestim]['SFinMC'] : 
-                      try:
-                        Nvv+= inputFile.Get(DYestim[iDYestim]['SFin']+'/events/histo_'+iMC).Integral()
-                        ENvv= ENvv + pow(inputFile.Get(DYestim[iDYestim]['SFin']+'/events/histo_'+iMC).GetBinError(1),2)
-                      except:
-                        print "Empty"
-                    ENvv = math.sqrt(ENvv)   
-                    Nvvdf = 0
-                    ENvvdf = 0
-                    for iMC in DYestim[iDYestim]['DFinMC'] : 
-                      Nvvdf+= inputFile.Get(DYestim[iDYestim]['DFin']+'/events/histo_'+iMC).Integral()
-                      ENvvdf= ENvvdf + pow(inputFile.Get(DYestim[iDYestim]['DFin']+'/events/histo_'+iMC).GetBinError(1),2)
-                    ENvvdf = math.sqrt(ENvvdf)
-                    Neu = Ndf - Nvvdf
-                    ENeu = math.sqrt(pow(Ndf,2)+pow(Nvvdf,2))
-                    rinout = DYestim[iDYestim]['rinout']
-                    tag = DYestim[iDYestim]['njet']+DYestim[iDYestim]['flavour']
-                    R  = Rinout[rinout][tag]['val']
-                    ER = Rinout[rinout][tag]['err']
-                    if 'rsyst' in DYestim[iDYestim] : ER = math.sqrt(pow(ER,2)+pow(DYestim[iDYestim]['rsyst'],2))
-                    k  = K_ff[rinout][tag]['val']
-                    Ek = K_ff[rinout][tag]['err']
-                    if 'ksyst' in DYestim[iDYestim] : Ek = math.sqrt(pow(Ek,2)+pow(DYestim[iDYestim]['ksyst'],2))
-                    print 'R = ',R,' +- ',ER
-                    print 'k = ',k,' +- ',Ek
-                    print 'Nin =',Nin,' Neu = ',Neu,' Nvv = ',Nvv
-                    Nout = DYCalc.N_DY(R , Nin , k , Neu, Nvv )
-                    #print R , Nin , k , Neu, Nvv, ER, ENin, Ek, ENeu, ENvv
-                    Eout = DYCalc.EN_DY(R , Nin , k , Neu, Nvv, ER, ENin, Ek, ENeu, ENvv )
-                    NUp  = Nout+Eout
-                    NDo  = Nout-Eout
-                    nHis = inputFile.Get(baseDir+'/'+subDir+'/histo_'+DYestim[iDYestim]['DYProc']).Integral()
-                    Acc  = 1.
-                    EAcc = 0.
-                    if 'AccNum' in DYestim[iDYestim] and 'AccDen' in DYestim[iDYestim] :
-                      hNum = inputFile.Get(DYestim[iDYestim]['AccNum']).Clone()
-                      hDen = inputFile.Get(DYestim[iDYestim]['AccDen']).Clone()
-                      hAcc = hNum.Clone("hAcc")
-                      hAcc.Reset()                      
-                      hAcc.Divide(hNum,hDen,1,1,"b") 
-                      Acc  = hAcc.Integral()
-                      EAcc = hAcc.GetBinError(1)
+                    if not 'Nout' in DYestim[iDYestim] :
+                      Nin = inputFile.Get(DYestim[iDYestim]['SFin']+'/events/histo_'+DYestim[iDYestim]['SFinDa']).Integral()
+                      ENin = inputFile.Get(DYestim[iDYestim]['SFin']+'/events/histo_'+DYestim[iDYestim]['SFinDa']).GetBinError(1)
+                      Ndf = inputFile.Get(DYestim[iDYestim]['DFin']+'/events/histo_'+DYestim[iDYestim]['DFinDa']).Integral()
+                      ENdf = inputFile.Get(DYestim[iDYestim]['DFin']+'/events/histo_'+DYestim[iDYestim]['DFinDa']).GetBinError(1)
+                      Nvv = 0
+                      ENvv = 0
+                      for iMC in DYestim[iDYestim]['SFinMC'] : 
+                        try:
+                          Nvv+= inputFile.Get(DYestim[iDYestim]['SFin']+'/events/histo_'+iMC).Integral()
+                          ENvv= ENvv + pow(inputFile.Get(DYestim[iDYestim]['SFin']+'/events/histo_'+iMC).GetBinError(1),2)
+                        except:
+                          print "Empty"
+                      ENvv = math.sqrt(ENvv)   
+                      Nvvdf = 0
+                      ENvvdf = 0
+                      for iMC in DYestim[iDYestim]['DFinMC'] : 
+                        Nvvdf+= inputFile.Get(DYestim[iDYestim]['DFin']+'/events/histo_'+iMC).Integral()
+                        ENvvdf= ENvvdf + pow(inputFile.Get(DYestim[iDYestim]['DFin']+'/events/histo_'+iMC).GetBinError(1),2)
+                      ENvvdf = math.sqrt(ENvvdf)
+                      Neu = Ndf - Nvvdf
+                      ENeu = math.sqrt(pow(Ndf,2)+pow(Nvvdf,2))
+                      rinout = DYestim[iDYestim]['rinout']
+                      tag = DYestim[iDYestim]['njet']+DYestim[iDYestim]['flavour']
+                      R  = Rinout[rinout][tag]['val']
+                      ER = Rinout[rinout][tag]['err']
+                      if 'rsyst' in DYestim[iDYestim] : ER = math.sqrt(pow(ER,2)+pow(DYestim[iDYestim]['rsyst'],2))
+                      k  = K_ff[rinout][tag]['val']
+                      Ek = K_ff[rinout][tag]['err']
+                      if 'ksyst' in DYestim[iDYestim] : Ek = math.sqrt(pow(Ek,2)+pow(DYestim[iDYestim]['ksyst'],2))
+                      print 'R = ',R,' +- ',ER
+                      print 'k = ',k,' +- ',Ek
+                      print 'Nin =',Nin,' Neu = ',Neu,' Nvv = ',Nvv
+                      Nout = DYCalc.N_DY(R , Nin , k , Neu, Nvv )
+                      #print R , Nin , k , Neu, Nvv, ER, ENin, Ek, ENeu, ENvv
+                      Eout = DYCalc.EN_DY(R , Nin , k , Neu, Nvv, ER, ENin, Ek, ENeu, ENvv )
+                      NUp  = Nout+Eout
+                      # Protect against error giving negative yield
+                      NDo  = max(Nout-Eout,Nout*0.000000001)
+                      nHis = inputFile.Get(baseDir+'/'+subDir+'/histo_'+DYestim[iDYestim]['DYProc']).Integral()
+                      if nHis == 0 : nHis = nHisDummy
+                      Acc  = 1.
+                      EAcc = 0.
+                      if 'AccNum' in DYestim[iDYestim] and 'AccDen' in DYestim[iDYestim] :
+                        hNum = inputFile.Get(DYestim[iDYestim]['AccNum']).Clone()
+                        hDen = inputFile.Get(DYestim[iDYestim]['AccDen']).Clone()
+                        hAcc = hNum.Clone("hAcc")
+                        hAcc.Reset()                      
+                        hAcc.Divide(hNum,hDen,1,1,"b") 
+                        Acc  = hAcc.Integral()
+                        EAcc = hAcc.GetBinError(1)
+                    else:
+                      Nout = DYestim[iDYestim]['Nout']
+                      NUp  = Nout
+                      NDo  = Nout
+                      if 'NUp' in DYestim[iDYestim] : NUp = DYestim[iDYestim]['NUp']
+                      if 'NDo' in DYestim[iDYestim] : NDo = DYestim[iDYestim]['NDo']
+                      nHis = inputFile.Get(baseDir+'/'+subDir+'/histo_'+DYestim[iDYestim]['DYProc']).Integral()
+                      if nHis == 0 : nHis = nHisDummy
+                      Acc  = 1.
+                      EAcc = 0.
+                      Eout = 0.5*((Nout-NDo)+(NUp-Nout))
                     if 'asyst' in DYestim[iDYestim] : EAcc = math.sqrt(pow(EAcc,2)+pow(DYestim[iDYestim]['asyst'],2)) 
                     print 'Acc = ',Acc," +- ",EAcc
                     # Central value or systematics not related to DY ESTIM
                     if not hName == 'histo_'+DYestim[iDYestim]['DYProc']+'_'+DYestim[iDYestim]['NPname']+'Up' and not hName == 'histo_'+DYestim[iDYestim]['DYProc']+'_'+DYestim[iDYestim]['NPname']+'Down' :
                       Scale = Nout / nHis 
                       print 'Nout= ' , Nout , ' +- ',Eout, '(Nout_MC = ',nHis,') -> Scale = ',Scale 
-                      print 'Nout*Acc= ' , Nout*Acc 
+                      print 'Nout*Acc= ' , Nout*Acc , iDYestim
                       for iBin in range(0,hTmp.GetNbinsX()+2) :
                         BinContent = hTmp.GetBinContent(iBin)
                         NewBinContent = BinContent*Scale*Acc
@@ -234,6 +262,8 @@ if __name__ == '__main__':
                         #print 'BinError  = ' , BinError   , ', NewBinError   = ',NewBinError
                       hDo.Write()
 
-              if not hName == 'histo_'+DYestim[iDYestim]['DYProc']+'_'+DYestim[iDYestim]['NPname']+'Up' and not hName == 'histo_'+DYestim[iDYestim]['DYProc']+'_'+DYestim[iDYestim]['NPname']+'Down' :
+              if iDYestimKeep == 'NONE': hTmp.Write()
+              else:
+               if not ( hName == 'histo_'+DYestim[iDYestimKeep]['DYProc']+'_'+DYestim[iDYestimKeep]['NPname']+'Up' or hName == 'histo_'+DYestim[iDYestimKeep]['DYProc']+'_'+DYestim[iDYestimKeep]['NPname']+'Down' ) :
                 hTmp.Write()
 
