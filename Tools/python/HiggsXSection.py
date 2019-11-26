@@ -264,7 +264,7 @@ class HiggsXSection:
      if 'H0'     in SampleName and '_ToWWTo2L2Nu' in SampleName : HiggsMass = 125.0
      #if 'H0ph_ToWWTo2L2Nu' in SampleName or 'H0m_ToWWTo2L2Nu' in SampleName or 'H0pm_ToWWTo2L2Nu' in SampleName or 'H0L1_ToWWTo2L2Nu' in SampleName : HiggsMass = 125.0
      if not ProdMode == 'unknown' :
-       if float(HiggsMass) <= 130 : 
+       if float(HiggsMass) <= 130 and float(HiggsMass) >= 120: 
          HiggsProdXS = self.GetHiggsProdXS(YRVersion,energy,ProdMode,HiggsMass)
        else:
          HiggsProdXS = self.GetHiggsProdXS(YRVersion,energy,ProdMode,HiggsMass,'bsm')
@@ -309,15 +309,22 @@ class HiggsXSection:
         FinalState   = 'ZZ->4l'
         FinalStateBR = self._br['Z2ll']*self._br['Z2ll']
 
-     # ...... WH with W decays BR :wq
+     # ...... WH with W decays BR 
      if ProdMode == 'HWplus' or ProdMode == 'HWminus' :
-        if 'WToLNu'  in SampleName : 
+        if '_WToLNu_'  in SampleName : 
            FinalState   += ' + W->lv'
            FinalStateBR *= self._br['W2lv']
-        if 'WToQQ'   in SampleName :  
+        elif '_LNu_' in SampleName :
+           FinalState   += ' + W->lv'
+           FinalStateBR *= self._br['W2lv'] 
+        elif '_WToQQ_'   in SampleName :  
            FinalState   += ' + W->QQ'
            FinalStateBR *= self._br['W2QQ']
-
+     # ...... ZH with Z decays BR
+     if ProdMode == 'ZH' or ProdMode == 'ggZH' :
+        if '_ZTo2L_' in SampleName :
+           FinalState   += ' + Z->ll'
+           FinalStateBR *= self._br['Z2ll'] 
 
      HiggsXS['FinalState']   = FinalState
      HiggsXS['FinalStateBR'] = FinalStateBR

@@ -49,7 +49,12 @@ PUCfg = {
 
 PUCfg['Full2016v4'] = PUCfg['Full2016v2']
 PUCfg['Full2016v5'] = PUCfg['Full2016v2']
+PUCfg['Full2016v5_mh'] = PUCfg['Full2016v2']
 PUCfg['Full2017v4'] = PUCfg['Full2017v2']
 PUCfg['Full2017v5'] = PUCfg['Full2017v2']
 PUCfg['Full2017v2LP19'] = PUCfg['Full2017v2']
 PUCfg['Full2018v5'] = PUCfg['Full2018v4']
+
+PUCfg['Full2016v6'] = PUCfg['Full2016v5']
+PUCfg['Full2017v6'] = PUCfg['Full2017v5']
+PUCfg['Full2018v6'] = PUCfg['Full2018v5']

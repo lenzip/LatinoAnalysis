@@ -32,6 +32,7 @@ class TrigMaker(Module):
         self.el_minPt = 10
         self.el_maxEta = 2.5
         self.el_minEta = -2.5
+        self.cfg_path = cfg_path 
 
         cmssw_base = os.getenv('CMSSW_BASE')
         var = {}
@@ -184,6 +185,9 @@ class TrigMaker(Module):
            raise ValueError('_over_under can only operate on leptons, pdgI = ' + str(pdgId) + ', pt = ' + str(pt) + ', eta = ' + str(eta))
 
     def _get_DZEff(self,run_p,trigName,nvtxIn,pt1In,pt2In):
+      print self.cfg_path
+      print run_p,trigName,nvtxIn,pt1In,pt2In
+      print self.TM_DZEff[run_p][trigName] 
       DZeff = 1. 
       nvtx = nvtxIn
       pt1 = pt1In
@@ -283,10 +287,12 @@ class TrigMaker(Module):
         #print eff, eff_dz , eff_gl
  
         eff_dbl = [0., 0., 0.]
+        eff_sgl = [0., 0., 0.]
         eff_evt = [0., 0., 0.]
         for i in range(3): 
            eff_dbl[i] = (eff[4][i]*eff[3][i] + eff[2][i]*eff[5][i] - eff[3][i]*eff[2][i])*eff_gl[2][i]*eff_dz[i]
-           eff_evt[i] = (eff_dbl[i] + eff[0][i]*eff_gl[0][i]*(1. - eff[5][i]) + eff[1][i]*eff_gl[1][i]*(1. - eff[4][i]))
+           eff_sgl[i] =  eff[0][i]*eff_gl[0][i]+eff[1][i]*eff_gl[1][i]-eff[0][i]*eff[1][i]*eff_gl[0][i]*eff_gl[1][i]
+           eff_evt[i] = eff_sgl[i] + eff_dbl[i] - eff_sgl[i]*eff_dbl[i] 
         #print eff_dbl , eff_evt        
 
         eff_tl = eff[2][0]*eff[5][0]*eff_gl[2][0]*eff_dz[0] #eff_dz
@@ -304,11 +310,11 @@ class TrigMaker(Module):
         elif abs(pdgId1) == 11 and abs(pdgId2) == 13:
            eff_evt_v[0] = eff[0][0]*eff_gl[0][0]
            eff_evt_v[1] = eff[1][0]*eff_gl[1][0]
-           eff_evt_v[4]  = (eff_tl + (1 - eff_tl)*eff_lt)*eff_gl[2][0]
+           eff_evt_v[4]  = (eff[4][0]*eff[3][0] + eff[2][0]*eff[5][0] - eff[3][0]*eff[2][0])*eff_gl[2][0]*eff_dz[0]
         else:
            eff_evt_v[0] = eff[1][0]*eff_gl[0][0]
            eff_evt_v[1] = eff[0][0]*eff_gl[1][0]
-           eff_evt_v[4]  = (eff_tl + (1 - eff_tl)*eff_lt)*eff_gl[2][0]
+           eff_evt_v[4]  = (eff[4][0]*eff[3][0] + eff[2][0]*eff[5][0] - eff[3][0]*eff[2][0])*eff_gl[2][0]*eff_dz[0]
 
         # Trigger emulator
         Trig_em = [False, False, False, False, False, False]  
