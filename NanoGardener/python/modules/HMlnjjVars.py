@@ -73,6 +73,8 @@ class HMlnjjVarsClass(Module):
         self.out.branch("vbfjj_jj_dEta" , "F")
         self.out.branch("vbfjj_jj_mass" , "F")
 
+        self.out.branch("largest_nonW_mjj", "F")
+
         self.out.branch("IsVbfFat" , "O")
         self.out.branch("IsVbfjj" , "O")
 
@@ -129,6 +131,8 @@ class HMlnjjVarsClass(Module):
         vbfFat_jj_mass = -999
         vbfjj_jj_dEta  = -999
         vbfjj_jj_mass  = -999
+        # largest mjj ignoring any W candidate jets, regardless of separation in eta
+        largest_nonW_mjj = -999
 
 
         IsFat = False
@@ -147,12 +151,13 @@ class HMlnjjVarsClass(Module):
         CleanJetNotFat_col = Collection(event, 'CleanJetNotFat')
         Jet_col            = Collection(event, 'Jet')
 
-        met_pt         = getattr(event, "MET_pt")
+        met_pt         = getattr(event, "PuppiMET_pt")
+        #met_pt         = getattr(event, "MET_pt")
 
-        Wlep_pt_PF    = getattr(event, "Wlep_pt_PF")
-        Wlep_eta_PF   = getattr(event, "Wlep_eta_PF")
-        Wlep_phi_PF   = getattr(event, "Wlep_phi_PF")
-        Wlep_mass_PF  = getattr(event,"Wlep_mass_PF")
+        Wlep_pt_Puppi    = getattr(event, "Wlep_pt_Puppi")
+        Wlep_eta_Puppi   = getattr(event, "Wlep_eta_Puppi")
+        Wlep_phi_Puppi   = getattr(event, "Wlep_phi_Puppi")
+        Wlep_mass_Puppi  = getattr(event,"Wlep_mass_Puppi")
 
         Wjj_pt     = getattr(event,"Whad_pt")
         Wjj_eta    = getattr(event,"Whad_eta")
@@ -163,20 +168,15 @@ class HMlnjjVarsClass(Module):
         Wjj_ClJet1_idx= getattr(event, "idx_j2")
 
 
-
-
-
-
         if Lept_col._len < 1: return False
         Flavlnjj  = -999
         if abs(Lept_col[0]['pdgId']) == 11 : Flavlnjj = 1
         if abs(Lept_col[0]['pdgId']) == 13 : Flavlnjj = 2
 
-
-        self.Wlep_4v.SetPtEtaPhiM(Wlep_pt_PF,
-                               Wlep_eta_PF,
-                               Wlep_phi_PF,
-                               Wlep_mass_PF
+        self.Wlep_4v.SetPtEtaPhiM(Wlep_pt_Puppi,
+                               Wlep_eta_Puppi,
+                               Wlep_phi_Puppi,
+                               Wlep_mass_Puppi
                             )
 
         ##Check btagged event or not
@@ -187,9 +187,6 @@ class HMlnjjVarsClass(Module):
             if Jet_col[ jet_idx ]['btagDeepB'] > bWP:
                 if Jet_col[ jet_idx ]['pt'] > 20:
                     Wfat_Btop = True
-
-
-
 
 
         # FatJet event from FatJet module, but need to apply cut further
@@ -208,7 +205,7 @@ class HMlnjjVarsClass(Module):
             self.HlnFat_4v = self.Wfat_4v + self.Wlep_4v
             thisHlnFat_mass = self.HlnFat_4v.M()
 
-            thisWptOvHfatM = min(Wlep_pt_PF, Wfat_pt)/thisHlnFat_mass
+            thisWptOvHfatM = min(Wlep_pt_Puppi, Wfat_pt)/thisHlnFat_mass
 
             # FatJet Evt Cuts
               # These are already selected in postproduction but to make sure
@@ -239,7 +236,7 @@ class HMlnjjVarsClass(Module):
 
             Hlnjj_mass = self.Hlnjj_4v.M()
             Hlnjj_mt = self.Hlnjj_4v.Mt()
-            WptOvHak4M = min(Wlep_pt_PF, Wjj_pt)/Hlnjj_mass
+            WptOvHak4M = min(Wlep_pt_Puppi, Wjj_pt)/Hlnjj_mass
 
             Wlep_mt =  self.Wlep_4v.Mt()
 
@@ -256,9 +253,6 @@ class HMlnjjVarsClass(Module):
                 if abs(Jet_col[jdx]['eta']) > 2.4: continue
                 if Jet_col[jdx]['btagDeepB'] > bWP: Wjj_Btop = True
 
-
-
-
         # Save Event ---------------------------------
         # Evet Catagory
         Cat_Fat = [IsWfat, met_pt > 40]
@@ -268,7 +262,6 @@ class HMlnjjVarsClass(Module):
         IsJj = all(Cat_AK4)
 
         Evt_btagged = (IsFat and Wfat_Btop) or (IsJj and Wjj_Btop)
-
 
         EventVar['IsBoosted'] = IsFat
         EventVar['IsResolved'] = IsJj
@@ -311,6 +304,10 @@ class HMlnjjVarsClass(Module):
                             if mass_tmp > vbfFat_jj_mass:
                                 vbfFat_jj_dEta = dEta_tmp
                                 vbfFat_jj_mass = mass_tmp
+
+                        if mass_tmp > largest_nonW_mjj:
+                            largest_nonW_mjj = mass_tmp
+
                 if vbfFat_jj_mass > 500:
                     IsVbfFat = True
 
@@ -346,6 +343,10 @@ class HMlnjjVarsClass(Module):
                             if mass_tmp > vbfjj_jj_mass:
                                 vbfjj_jj_dEta = dEta_tmp
                                 vbfjj_jj_mass = mass_tmp
+
+                        if mass_tmp > largest_nonW_mjj:
+                            largest_nonW_mjj = mass_tmp
+
             if vbfjj_jj_mass > 500:
                 IsVbfjj = True
 
@@ -376,6 +377,8 @@ class HMlnjjVarsClass(Module):
         self.out.fillBranch( 'vbfFat_jj_mass'  , vbfFat_jj_mass)
         self.out.fillBranch( 'vbfjj_jj_dEta'    , vbfjj_jj_dEta)
         self.out.fillBranch( 'vbfjj_jj_mass'  , vbfjj_jj_mass)
+
+        self.out.fillBranch( 'largest_nonW_mjj', largest_nonW_mjj)
 
         self.out.fillBranch( 'Hlnjj_mass', Hlnjj_mass )
         self.out.fillBranch( 'WptOvHak4M', WptOvHak4M )
