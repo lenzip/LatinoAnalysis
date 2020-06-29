@@ -162,7 +162,7 @@ class vNLOEWKcorrectionWeightProducer(Module):
               vpt = 2000.
     
             if vpt > 0. :
-              ewknloW = self.graph_z_kfact.Eval(vpt)
+              ewknloW = self.graph_w_kfact.Eval(vpt)
                
               
 #  
@@ -280,7 +280,7 @@ class vNLOEWKcorrectionWeightProducer(Module):
 
  
         # now finally fill the branch ...
- 
+        #print ewknloW
         self.out.fillBranch("ewknloW",               ewknloW)
         self.out.fillBranch("ewknloWuncertainty",    ewknloWuncertainty)
 
